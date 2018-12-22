@@ -23,11 +23,12 @@ repositories {
 	mavenCentral()
 }
 
-
 dependencies {
 	implementation('org.springframework.boot:spring-boot-starter-jdbc')
 	implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
 	implementation('org.springframework.boot:spring-boot-starter-web')
+	compile 'org.webjars:font-awesome:4.7.0'
+	compile 'org.webjars:angularjs:1.7.5'
 	runtimeOnly('com.h2database:h2')
 	runtimeOnly('org.postgresql:postgresql')
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
