@@ -1,0 +1,50 @@
+{
+	"docRoot": {
+		"doc_id": 85086,
+		"doctype": 18,
+		"parent": 85085,
+		"$$hashKey": "object:15",
+		"children": [
+			{
+				"doc_id": 85089,
+				"doctype": 18,
+				"parent": 85086,
+				"string_id": 85089,
+				"value": "Титулка",
+				"sort_id": 85089,
+				"sort": 0,
+				"$$hashKey": "object:81"
+			},
+			{
+				"doc_id": 85087,
+				"doctype": 18,
+				"parent": 85086,
+				"string_id": 85087,
+				"value": "І. СИГНАЛЬНІ ПОЗНАЧКИ",
+				"sort_id": 85087,
+				"sort": 1,
+				"$$hashKey": "object:82"
+			},
+			{
+				"doc_id": 85088,
+				"doctype": 18,
+				"parent": 85086,
+				"string_id": 85088,
+				"value": "ІІ. ЛИСТОК ЗАПИСУ ЗАКЛЮЧНИХ (УТОЧНЕНИХ) ДІАГНОЗІВ",
+				"sort_id": 85088,
+				"sort": 2,
+				"$$hashKey": "object:83"
+			},
+			{
+				"doc_id": 85090,
+				"doctype": 18,
+				"parent": 85086,
+				"string_id": 85090,
+				"value": "ІІІ. ВІДОМОСТІ ПРО ЩЕПЛЕННЯ",
+				"sort_id": 85090,
+				"sort": 3,
+				"$$hashKey": "object:84"
+			}
+		]
+	}
+}
