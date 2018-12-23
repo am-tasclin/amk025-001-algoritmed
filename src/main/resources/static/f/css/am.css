@@ -1,0 +1,9 @@
+.am-b {
+	font-weight: bold;
+}
+
+@media print {
+	.am-no-print, .am-no-print * {
+		display: none !important;
+	}
+}
