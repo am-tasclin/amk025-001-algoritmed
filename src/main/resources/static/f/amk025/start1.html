@@ -14,8 +14,13 @@
 <script src="/f/js/amk025-001.js"></script>
 <script src="/f/amk025/start1.js"></script>
 <body class="w3-container">
-	<h1 class="w3-container w3-small">Електронна медична картка
-		амбулаторного хворого (форма № 025/о)</h1>
+	<h1 class="w3-container w3-small">
+		<a href="/"
+			class=" w3-btn w3-border w3-padding-small w3-round-large w3-hover-shadow">
+			<i class="fa fa-home w3-large" aria-hidden="true"></i>
+		</a> Електронна медична картка амбулаторного хворого (форма № 025/о)
+	</h1>
+	<!-- 
 	<div class="am-no-print">
 		<ul>
 			<li data-ng-repeat="amk025_l1 in amk025_template.docRoot.children">
@@ -23,8 +28,23 @@
 			</li>
 		</ul>
 	</div>
+		 -->
 	<div class="w3-border w3-border-black w3-center w3-small">
-		{{elementsMap[request.parameters.l1].value}}</div>
+		<span class="w3-tiny w3-dropdown-hover w3-white w3-hover-shadow">
+			<span class="am-no-print w3-large"> ☰ </span> &nbsp;
+			{{elementsMap[request.parameters.l1].value}}
+			<div class="w3-dropdown-content w3-bar-block w3-border w3-tiny"
+			style="left: -50px; width: 400px"
+			>
+
+				<a href="?l1={{amk025_l1.doc_id}}" class="w3-bar-item w3-button"
+					data-ng-repeat="amk025_l1 in amk025_template.docRoot.children">
+					{{amk025_l1.value}}</a>
+
+			</div>
+		</span>
+
+	</div>
 	<div class="w3-border w3-border-black"
 		data-ng-repeat="o in [elementsMap[request.parameters.l1]]"
 		data-ng-include="'/f/amk025/l1/doc_'+request.parameters.l1+'.html'"></div>
