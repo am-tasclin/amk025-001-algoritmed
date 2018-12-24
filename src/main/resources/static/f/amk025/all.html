@@ -21,6 +21,7 @@
 		</a> Електронна медична картка амбулаторного хворого (форма № 025/о)
 	</h1>
 	<div data-ng-repeat="o_1 in amk025_template.docRoot.children"
+		data-ng-if="85115!=o_1.doc_id"
 		data-ng-include="'/f/amk025/l1/doc_part.html'"></div>
 </body>
 </html>
