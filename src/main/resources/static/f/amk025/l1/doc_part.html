@@ -1,0 +1,32 @@
+<div>
+	<div class="w3-border w3-border-black w3-center w3-small"
+		id="l1_{{o_1.doc_id}}">
+		<span class="w3-tiny w3-dropdown-hover w3-white w3-hover-shadow">
+			<span class="am-no-print w3-large"> ☰ </span> &nbsp; {{o_1.value}}
+			<div class="w3-dropdown-content w3-bar-block w3-border w3-tiny"
+				style="left: -50px; width: 400px">
+
+				<a data-ng-href="?l1={{amk025_l1.doc_id}}#l1_{{amk025_l1.doc_id}}"
+					class="w3-bar-item w3-button"
+					data-ng-repeat="amk025_l1 in amk025_template.docRoot.children">
+					{{amk025_l1.value}}</a>
+
+			</div>
+		</span>
+		<div class="w3-right am-no-print">
+			<a
+				data-ng-href="/f/amk025/start1.html?l1={{o_1.doc_id}}#l1_{{o_1.doc_id}}"
+				class=" w3-btn  w3-padding-small  w3-hover-shadow am-no-print">
+				1 </a> <a
+				data-ng-href="/f/amk025/all.html?l1={{o_1.doc_id}}#l1_{{o_1.doc_id}}"
+				class=" w3-btn  w3-padding-small  w3-hover-shadow am-no-print">
+				* </a>
+		</div>
+	</div>
+	<!-- 
+	<div class="w3-border w3-border-black" data-ng-repeat="o in [o_1]"
+		data-ng-include="'/f/amk025/l1/doc_'+o_1.doc_id+'.html'"></div>
+	 -->
+	<div class="w3-border w3-border-black" data-ng-repeat="o in [o_1]"
+		data-ng-include="'/f/amk025/l1/doc_'+o.doc_id+'.html'"></div>
+</div>
