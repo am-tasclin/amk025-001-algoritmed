@@ -46,10 +46,13 @@ function Exe_fn($scope, $http){
 	}
 }
 
-function json_elementsMap(json, elementsMap){
+function json_elementsMap(json, elementsMap, referencesMap){
 	elementsMap[json.doc_id] = json
+	if(json.reference){
+		referencesMap[json.reference] = null
+	}
 	angular.forEach(json.children, function(v){
-		json_elementsMap(v, elementsMap)
+		json_elementsMap(v, elementsMap, referencesMap)
 	})
 }
 
