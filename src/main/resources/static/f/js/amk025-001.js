@@ -1,5 +1,7 @@
 var app = angular.module('myApp', ['ngSanitize']);
 var initApp = function($scope, $http){
+	$scope.elementsMap = {}
+	$scope.referencesMap = {}
 	build_request($scope)
 	exe_fn = new Exe_fn($scope, $http);
 	exe_fn.httpGet_j2c_table_db1_params_then_fn = function(params, then_fn){
@@ -9,6 +11,29 @@ var initApp = function($scope, $http){
 			then_fn : then_fn,
 	}	}
 
+}
+
+function readRef($scope){
+	console.log($scope.referencesMap)
+	angular.forEach($scope.referencesMap, function(v,k){
+		if(!v){
+			console.log(k)
+			readSql({
+				sql:sql_amk025.read_obj_from_docRoot(),
+				jsonId:k,
+				afterRead:function(response){
+					if(!$scope.referencesMap[k]){
+						console.log(k)
+						if(response.data.list[0]){
+							var jsonDoc = JSON.parse(response.data.list[0].docbody)
+							console.log(jsonDoc)
+							json_elementsMap(jsonDoc.docRoot, $scope.elementsMap, $scope.referencesMap)
+						}
+					}
+				}
+			})
+		}
+	})
 }
 
 function readSql(params, obj){
@@ -59,8 +84,7 @@ function json_elementsMap(json, elementsMap, referencesMap){
 function build_request($scope){
 	$scope.request={};
 //	console.log($scope.request)
-	$scope.request.pathNameValue = window.location.pathname.split('.html')[0].split('/').reverse()[0]
-	console.log($scope.request.pathNameValue)
+	$scope.request.path = window.location.pathname.split('.html')[0].split('/').reverse()
 	$scope.request.parameters={};
 	if(window.location.search.split('?')[1]){
 		angular.forEach(window.location.search.split('?')[1].split('&'), function(value, index){
@@ -68,4 +92,10 @@ function build_request($scope){
 			$scope.request.parameters[par[0]] = par[1];
 		});
 	}
+}
+
+var sql_amk025 = {}
+sql_amk025.amk025_template = function(){
+	return "SELECT * FROM doc d2, doc d1,docbody " +
+	"WHERE d1.doc_id=docbody_id AND d2.doc_id=d1.parent AND d2.doctype IN (6,17) AND d1.reference=:jsonId"
 }

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html data-ng-app="myApp" data-ng-controller="myCtrl" lang="uk-UA">
+<meta charset="utf-8" />
+<title>Реєстратура</title>
+<link rel="stylesheet" href="/f/css/am.css">
+<link rel="stylesheet" href="/f/css/w3.css">
+<link rel="stylesheet"
+	href="/webjars/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="shortcut icon" href="/f/img/algoritmed.ico"
+	type="image/x-icon">
+<script src="/webjars/angularjs/1.7.5/angular.min.js"></script>
+<script src="/webjars/angularjs/1.7.5/angular-sanitize.min.js"></script>
+<script src="/webjars/angularjs/1.7.5/i18n/angular-locale_uk.js"></script>
+<script src="/f/js/amk025-001.js"></script>
+<script src="/f/reception/start1.js"></script>
+<body class="w3-container">
+	<h1 class="w3-container w3-small">
+		<a href="/"
+			class=" w3-btn w3-border w3-padding-small w3-round-large w3-hover-shadow am-no-print">
+			<i class="fa fa-home w3-large" aria-hidden="true"></i>
+		</a> &nbsp; Реєстратура
+	</h1>
+	<div class="w3-row-padding">
+		<div class="w3-half">
+			<div class="w3-border">
+				<div>Пошук пацієнта
+				<input class="w3-border"/>
+				</div>
+				<table>
+					<thead>
+						<tr class="w3-tiny w3-blue-gray">
+							<td>☰</td>
+							<th data-ng-repeat="col in patient_template.docRoot.children">
+								{{col.value}}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr data-ng-repeat="row in patient_data">
+							<td></td>
+							<td data-ng-repeat="col in patient_template.docRoot.children">
+								{{row['col_'+col.doc_id]}}
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<!-- 
+				<div class="w3-code w3-tiny">{{patient_data}}</div>
+				<div class="w3-code w3-tiny">{{patient_template.docRoot.children}}</div>
+				 -->
+			</div>
+		</div>
+		<div class="w3-half">
+			<div class="w3-border">
+				<div >Заведеня нового пацієнта</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
