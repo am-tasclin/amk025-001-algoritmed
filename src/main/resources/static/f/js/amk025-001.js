@@ -13,6 +13,56 @@ var initApp = function($scope, $http){
 
 }
 
+var initEdit_table = function($scope, $http){
+	$scope.edit_table = {}
+	console.log($scope.edit_table)
+	$scope.edit_table.saveEditRow = function(){
+//		this.editRow.row_id = this.editRow['row_'+$scope.request.parameters.tableId+'_id']
+		//console.log(this)
+		//console.log(this.editRow)
+		if(this.editRow){
+			if(this.editRow.row_id && this.editRow.row_id!=0){
+				saveRow(this.editRow)
+			}else{//INSERT row
+				saveRow(this.editRow, true)
+			}
+		}
+	}
+
+	$scope.edit_table.addRow = function(table_id, table_data){
+		var rowAttName = 'row_'+table_id+'_id'
+		if(table_data[0][rowAttName]==0){
+			this.newRow = table_data[0]
+		}else{
+			this.newRow = {}
+			this.newRow[rowAttName] = 0
+			table_data.splice(0,0,this.newRow)
+		}
+		console.log(this.newRow)
+		this.selectedRow = this.newRow
+		$scope.edit_table.editRow = this.newRow
+//		initEditRow()
+	}
+	$scope.edit_table.selectRow = function(row){
+		this.selectedRow = row
+		console.log($scope.edit_table.selectedRow)
+	}
+	$scope.edit_table.cancelEditRow = function(){
+		delete $scope.edit_table.editRow
+		delete $scope.edit_table.newRow
+	}
+	$scope.edit_table.saveEditRow = function(){
+		this.editRow.row_id = this.editRow['row_'+$scope.request.parameters.tableId+'_id']
+		//console.log(this.editRow)
+		if(this.editRow.row_id){
+			saveRow(this.editRow)
+		}else{//INSERT row
+			saveRow(this.editRow, true)
+		}
+	}
+}
+
+
 function readRef($scope){
 	console.log($scope.referencesMap)
 	angular.forEach($scope.referencesMap, function(v,k){

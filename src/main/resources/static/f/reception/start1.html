@@ -23,37 +23,64 @@
 	<div class="w3-row-padding">
 		<div class="w3-half">
 			<div class="w3-border">
-				<div>Пошук пацієнта
-				<input class="w3-border"/>
+				<div>
+					Пошук пацієнта <input class="w3-border" />
 				</div>
-				<table>
-					<thead>
-						<tr class="w3-tiny w3-blue-gray">
-							<td>☰</td>
-							<th data-ng-repeat="col in patient_template.docRoot.children">
-								{{col.value}}</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr data-ng-repeat="row in patient_data">
-							<td></td>
-							<td data-ng-repeat="col in patient_template.docRoot.children">
-								{{row['col_'+col.doc_id]}}
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<!-- 
-				<div class="w3-code w3-tiny">{{patient_data}}</div>
-				<div class="w3-code w3-tiny">{{patient_template.docRoot.children}}</div>
-				 -->
+				<div data-ng-repeat="o in [patient_template.docRoot]"
+					data-ng-init="rowAttName = 'row_'+o.doc_id+'_id';">
+					<table>
+						<thead>
+							<tr class="w3-tiny w3-blue-gray">
+								<td>☰</td>
+								<th data-ng-repeat="col in patient_template.docRoot.children">
+									{{col.value}}</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr data-ng-repeat="row in patient_data" class="w3-hover-shadow"
+								data-ng-click="edit_table.selectRow(row)">
+								<td
+									data-ng-class="{'w3-green':row[rowAttName]==edit_table.selectedRow[rowAttName]}">
+								</td>
+								<td data-ng-repeat="col in patient_template.docRoot.children">
+									{{row['col_'+col.doc_id]?'':'&nbsp;'}}
+									{{row['col_'+col.doc_id]}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 		<div class="w3-half">
 			<div class="w3-border">
-				<div >Заведеня нового пацієнта</div>
+				<div>
+					<span
+					class="w3-hover-shadow"
+						data-ng-click="edit_table.addRow(patient_template.docRoot.doc_id, patient_data)">
+						Заведеня нового пацієнта </span>
+				</div>
+				<div>
+					<button class="w3-border"
+					data-ng-click="edit_table.saveEditRow()"
+					>OK записати</button>
+					<button class="w3-border"
+					data-ng-click="edit_table.cancelEditRow()"
+					>Cancel</button>
+					{{!edit_table.editRow}}
+				</div>
+				<div data-ng-repeat="col in patient_template.docRoot.children"
+				>
+					<div class="w3-tiny am-b">{{col.value}}</div>
+					<input class="w3-border" data-ng-model="edit_table.newRow['col_'+col.doc_id]" 
+				data-ng-disabled="!edit_table.editRow"
+					/>
+				</div>
 			</div>
 		</div>
 	</div>
+	<!-- 
+				<div class="w3-code w3-tiny">{{patient_data}}</div>
+				<div class="w3-code w3-tiny">{{patient_template.docRoot.children}}</div>
+				 -->
 </body>
 </html>

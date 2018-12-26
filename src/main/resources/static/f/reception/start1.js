@@ -1,5 +1,7 @@
 app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	initApp($scope, $http)
+	initEdit_table($scope, $http)
+	
 	readSql({
 		sql:sql_amk025.amk025_template(),
 		jsonId:85242,
