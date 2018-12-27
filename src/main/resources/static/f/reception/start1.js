@@ -1,6 +1,7 @@
 app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	initApp($scope, $http)
 	initEdit_table($scope, $http)
+	saveRow = new Init_saveRow($scope, $http, 85243)
 	
 	readSql({
 		sql:sql_amk025.amk025_template(),
@@ -18,6 +19,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 					console.log($scope.patient_data)
 				},
 			})
+//			saveRow.saveRow()
 		}
 	})
 	

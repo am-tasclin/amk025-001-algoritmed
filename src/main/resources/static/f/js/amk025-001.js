@@ -51,13 +51,17 @@ var initEdit_table = function($scope, $http){
 		delete $scope.edit_table.editRow
 		delete $scope.edit_table.newRow
 	}
+	$scope.edit_table.setEditRow = function(table_id){
+		console.log(this.selectedRow)
+		$scope.edit_table.editRow = this.selectedRow
+	}
 	$scope.edit_table.saveEditRow = function(){
-		this.editRow.row_id = this.editRow['row_'+$scope.request.parameters.tableId+'_id']
+		this.editRow.row_id = this.editRow['row_'+saveRow.tableId+'_id']
 		//console.log(this.editRow)
 		if(this.editRow.row_id){
-			saveRow(this.editRow)
+			saveRow.saveRow(this.editRow)
 		}else{//INSERT row
-			saveRow(this.editRow, true)
+			saveRow.saveRow(this.editRow, true)
 		}
 	}
 }
@@ -99,6 +103,20 @@ function readSql(params, obj){
 		}
 	}))
 }
+
+
+var writeSql = function(data){
+	exe_fn.httpPost
+	({	url:'/r/url_sql_read_db1',
+		then_fn:function(response) {
+//			console.log(response.data)
+			if(data.dataAfterSave)
+				data.dataAfterSave(response)
+		},
+		data:data,
+	})
+}
+
 
 function Exe_fn($scope, $http){
 	this.httpGet=function(progr_am){
