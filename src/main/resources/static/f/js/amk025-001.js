@@ -55,13 +55,13 @@ var initEdit_table = function($scope, $http){
 		console.log(this.selectedRow)
 		$scope.edit_table.editRow = this.selectedRow
 	}
-	$scope.edit_table.saveEditRow = function(){
+	$scope.edit_table.saveEditRow = function(rowParentId){
 		this.editRow.row_id = this.editRow['row_'+saveRow.tableId+'_id']
 		//console.log(this.editRow)
 		if(this.editRow.row_id){
 			saveRow.saveRow(this.editRow)
 		}else{//INSERT row
-			saveRow.saveRow(this.editRow, true)
+			saveRow.saveRow(this.editRow, rowParentId)
 		}
 	}
 }

@@ -6,12 +6,8 @@ sql_1c.insertCell = function(row_id, columnId, i){
 	return sql
 }
 var Init_saveRow = function ($scope, $http, tableId){
-	this.fn1 = function(){
-		console.log('-----init_saveRow----fn1------')
-	}
 	this.tableId = tableId
-	//saveRow
-	this.saveRow = function( editRow, isInsertRow){
+	this.saveRow = function(editRow, rowParentId){
 		var sql = '', i = 2
 		console.log(this.tableId)
 		console.log($scope.elementsMap)
@@ -26,7 +22,7 @@ var Init_saveRow = function ($scope, $http, tableId){
 			v = editRow['col_'+columnId]
 			cellId = editRow['col_'+columnId+'_id']
 			var reference2 = editRow['row_'+columnId+'_id']
-			console.log(columnId+'/'+v+'/'+cellId+'/'+columnObj.doctypei+'/'+reference2)
+			console.log(columnId+'/'+v+'/'+cellId+'/'+columnObj.doctype+'/'+reference2)
 			if(cellId){//UPDATE value
 				switch (columnObj.doctype) {
 				case 27:
@@ -61,27 +57,31 @@ var Init_saveRow = function ($scope, $http, tableId){
 //					sql += "UPDATE doc SET reference2 = :nextDbId"+i +" WHERE doc_id = :nextDbId"+i + " ;\n "
 //					sql += "INSERT INTO inn (inn, inn_id) VALUES ('"+v+"',:nextDbId"+i +" );\n"
 					break;
-				case 26:
-					sql += sql_1c.insertCell(editRow.row_id, columnId, i)
-					sql += "INSERT INTO date (value, date_id) VALUES ('"+v+"',:nextDbId" +i +" );\n"
-					break;
-				case 22:
-					sql += sql_1c.insertCell(editRow.row_id, columnId, i)
-					sql += "INSERT INTO string (value, string_id) VALUES ('"+v+"',:nextDbId" +i +" );\n"
-					break;
-				case 23:
-					sql += sql_1c.insertCell(editRow.row_id, columnId, i)
-					sql += "INSERT INTO integer (value, integer_id) VALUES ("+v+",:nextDbId" +i +" );\n"
-					break;
+				}
+				if(v){
+					switch (columnObj.doctype) {
+					case 26:
+						sql += sql_1c.insertCell(editRow.row_id, columnId, i)
+						sql += "INSERT INTO date (value, date_id) VALUES ('"+v+"',:nextDbId" +i +" );\n"
+						break;
+					case 22:
+						sql += sql_1c.insertCell(editRow.row_id, columnId, i)
+						sql += "INSERT INTO string (value, string_id) VALUES ('"+v+"',:nextDbId" +i +" );\n"
+						break;
+					case 23:
+						sql += sql_1c.insertCell(editRow.row_id, columnId, i)
+						sql += "INSERT INTO integer (value, integer_id) VALUES ("+v+",:nextDbId" +i +" );\n"
+						break;
+					}
 				}
 				i++
 			}
 		})
 		if(sql){
-			if(isInsertRow){
+			if(rowParentId){
 				sql = "INSERT INTO doc (doctype, doc_id, parent, reference) " +
-				"VALUES (4, :nextDbId1, " + $scope.edit_table.table_data_id
-				+ ", " +$scope.request.parameters.tableId+");\n" +
+				"VALUES (4, :nextDbId1, " + rowParentId
+				+ ", " +this.tableId+");\n" +
 				sql
 			}
 			/*
@@ -90,12 +90,13 @@ var Init_saveRow = function ($scope, $http, tableId){
 			console.log(sql)
 			writeSql({sql : sql,
 				dataAfterSave:function(response){
-					if(response.data.sql.indexOf('(4')>0){
-						angular.forEach(response.data, function(v,k){
-							if(k.indexOf('list')==0){
-								console.log(v[0])
-								$scope.table_data.list.splice(0,0,v[0])
-							}	})	}	}	})
+					if(response.data.sql){
+						if(response.data.sql.indexOf('(4')>0){
+							angular.forEach(response.data, function(v,k){
+								if(k.indexOf('list')==0){
+									console.log(v[0])
+									$scope.table_data.list.splice(0,0,v[0])
+			}	})	}	}	}	})
 		}
 	}
 
