@@ -34,7 +34,7 @@ var Init_saveRow = function ($scope, $http, tableId){
 					sql += "UPDATE doc SET reference = " + editRow['ref2_'+columnId] +" " +" WHERE doc_id = "+cellId + ";\n "
 					break;
 				case 26:
-					sql += "UPDATE string SET value = '" + v +"' " +" WHERE date_id = "+cellId + ";\n "
+					sql += "UPDATE date SET value = '" + v +"' " +" WHERE date_id = "+cellId + ";\n "
 					break;
 				case 22:
 					sql += "UPDATE string SET value = '" + v +"' " +" WHERE string_id = "+cellId + ";\n "
