@@ -23,7 +23,7 @@
 	</h1>
 	<div class="w3-row-padding">
 		<div class="w3-half">
-			<div class="w3-border">
+			<div class="w3-border" style="margin-bottom: 8px;">
 				<div>
 					Пошук пацієнта <input class="w3-border" />
 				</div>
@@ -53,6 +53,12 @@
 			</div>
 		</div>
 		<div class="w3-half">
+			<div class="w3-border" style="margin-bottom: 8px;">
+				Завести амбулаторну картку:
+				<button class="w3-border w3-hover-shadow"
+					data-ng-disabled="!edit_table.selectedRow"
+					data-ng-click="makeAmk025()">ОК завести</button>
+			</div>
 			<div class="w3-border">
 				<div>
 					<button class="w3-tiny w3-border w3-hover-shadow"
@@ -61,24 +67,20 @@
 					<button class="w3-tiny w3-border w3-hover-shadow"
 						data-ng-disabled="!edit_table.selectedRow"
 						data-ng-click="edit_table.setEditRow(patient_template.docRoot.doc_id)">
-						редагувати</button>
+						редагувати пацієнта</button>
 				</div>
 				<div>
 					<button class="w3-border"
-					data-ng-click="edit_table.saveEditRow(patient_template.tableDataElement.doc_id)"
-					>OK записати</button>
+						data-ng-click="edit_table.saveEditRow(patient_template.tableDataElement.doc_id)">OK
+						записати</button>
 					<button class="w3-border"
-					data-ng-click="edit_table.cancelEditRow()"
-					>Cancel</button>
+						data-ng-click="edit_table.cancelEditRow()">Cancel</button>
 				</div>
-				<div data-ng-repeat="col in patient_template.docRoot.children"
-				>
-					<div class="w3-tiny am-b"
-					title="{{col.doc_id}}"
-					>{{col.value}}</div>
-					<input class="w3-border" data-ng-model="edit_table.editRow['col_'+col.doc_id]" 
-				data-ng-disabled="!edit_table.editRow"
-					/>
+				<div data-ng-repeat="col in patient_template.docRoot.children">
+					<div class="w3-tiny am-b" title="{{col.doc_id}}">{{col.value}}</div>
+					<input class="w3-border"
+						data-ng-model="edit_table.editRow['col_'+col.doc_id]"
+						data-ng-disabled="!edit_table.editRow" />
 				</div>
 			</div>
 		</div>

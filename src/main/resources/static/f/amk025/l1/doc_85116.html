@@ -3,11 +3,21 @@
 		<thead class="w3-small">
 			<tr>
 				<th class="w3-border w3-border-black" title="{{col.doc_id}}"
-					data-ng-repeat="col in elementsMap[85182].children">{{col.value}}<span
-					data-ng-if="85184==col.doc_id">: <span
-						data-ng-repeat="place in col.children" title="{{place.value}}">
+					data-ng-repeat="col in elementsMap[85182].children"
+					data-ng-switch="col.doc_id">
+					<div data-ng-switch-default>{{col.value}}</div>
+					<div data-ng-switch-when="85184" class="w3-tooltip">
+						М: <span
+							style="position: absolute; left: -50px; bottom: 18px; width: 300px"
+							class="w3-text w3-tag">{{col.value}}: <br /> <span
+							data-ng-repeat="place in col.children">
+								{{1+$index}}-{{place.value}}, </span></span> 1234
+						<!-- 
+								 <span
+							data-ng-repeat="place in col.children" title="{{place.value}}">
 							{{1+$index}}-{{place.value.substring(0,2)}}, </span>
-				</span>
+								 -->
+					</div>
 				</th>
 			</tr>
 			<tr>

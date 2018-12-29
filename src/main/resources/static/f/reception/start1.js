@@ -3,6 +3,10 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	initEdit_table($scope, $http)
 	saveRow = new Init_saveRow($scope, $http, 85243)
 	
+	$scope.makeAmk025 = function(){
+		console.log(123)
+	}
+	
 	readSql({
 		sql:sql_amk025.amk025_template(),
 		jsonId:85242,

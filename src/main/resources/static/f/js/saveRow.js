@@ -6,7 +6,9 @@ sql_1c.insertCell = function(row_id, columnId, i){
 	return sql
 }
 var Init_saveRow = function ($scope, $http, tableId){
+	
 	this.tableId = tableId
+	
 	this.saveRow = function(editRow, rowParentId){
 		var sql = '', i = 2
 		console.log(this.tableId)
