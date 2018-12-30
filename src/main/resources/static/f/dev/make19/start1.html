@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html data-ng-app="myApp" data-ng-controller="myCtrl" lang="uk-UA">
+<meta charset="utf-8" />
+<title>{{elementsMap[request.parameters.jsonId].doc_id}} - make
+	19</title>
+<link rel="stylesheet" href="/f/css/am.css">
+<link rel="stylesheet" href="/f/css/w3.css">
+<link rel="stylesheet"
+	href="/webjars/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="shortcut icon" href="/f/img/algoritmed.ico"
+	type="image/x-icon">
+<script src="/webjars/angularjs/1.7.5/angular.min.js"></script>
+<script src="/webjars/angularjs/1.7.5/angular-sanitize.min.js"></script>
+<script src="/webjars/angularjs/1.7.5/i18n/angular-locale_uk.js"></script>
+<script src="/f/js/amk025-001.js"></script>
+<script src="/f/js/jsonDoc.js"></script>
+<script src="/f/js/saveRow.js"></script>
+<script src="/f/dev/make19/start1.js"></script>
+<body class="w3-container">
+	<h1 class="w3-container w3-small">
+		<a href="/"
+			class=" w3-btn w3-border w3-padding-small w3-round-large w3-hover-shadow am-no-print">
+			<i class="fa fa-home w3-large" aria-hidden="true"></i>
+		</a> &nbsp; make 19
+	</h1>
+	<div>{{elementsMap[request.parameters.jsonId].doc_id}} -
+		{{elementsMap[request.parameters.jsonId].value}}</div>
+	<div class="w3-row-padding">
+		<div class="w3-half">
+			<div class="w3-border">
+				<div title="{{el.doc_id}}"
+					data-ng-repeat="el in elementsMap[request.parameters.jsonId].children">
+					{{el.doctype}} - {{doctype[el.doctype].doctype}} <span
+						class="w3-small" data-ng-if="el.reference">({{el.reference}})</span>
+				</div>
+			</div>
+		</div>
+		<div class="w3-half">
+			<div class="w3-border">
+				<button class="w3-border w3-small"
+				data-ng-click="addFirstChildElement(47)"
+					data-ng-if="!elementsMap[request.parameters.jsonId].meta_elements[47]">
+					add table_data</button>
+
+			</div>
+		</div>
+	</div>
+
+	<div>
+		<div
+			data-ng-repeat="o in [elementsMap[request.parameters.jsonId].docRoot]">
+			<span class="am-b w3-tiny"> inner doc tables </span>
+			<ul data-ng-if="o.children">
+				<li data-ng-repeat="el in o.children">{{!!el.children}}
+					{{el.value}}</li>
+			</ul>
+		</div>
+	</div>
+
+</body>
+</html>
