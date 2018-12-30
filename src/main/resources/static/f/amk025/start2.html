@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html data-ng-app="myApp" data-ng-controller="myCtrl" lang="uk-UA">
+<meta charset="utf-8" />
+<title>ф.025 -
+{{elementsMap[request.parameters.l1].value}}
+</title>
+<link rel="stylesheet" href="/f/css/am.css">
+<link rel="stylesheet" href="/f/css/w3.css">
+<link rel="stylesheet"
+	href="/webjars/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="shortcut icon" href="/f/img/algoritmed.ico"
+	type="image/x-icon">
+<script src="/webjars/angularjs/1.7.5/angular.min.js"></script>
+<script src="/webjars/angularjs/1.7.5/angular-sanitize.min.js"></script>
+<script src="/webjars/angularjs/1.7.5/i18n/angular-locale_uk.js"></script>
+<script src="/f/js/amk025-001.js"></script>
+<script src="/f/amk025/start1.js"></script>
+<body class="w3-container">
+	<h1 class="w3-container w3-small">
+		<span data-ng-include="'/f/home-link.html'"></span> Електронна медична
+		картка амбулаторного хворого (форма № 025/о)
+	</h1>
+	<div data-ng-include="'/f/mdoc-process-links.html'"></div>
+	
+	<div data-ng-repeat="o_1 in [elementsMap[request.parameters.l1]]"
+		data-ng-include="'/f/amk025/l1/doc_part.html'"></div>
+</body>
+</html>

@@ -2,6 +2,7 @@ var app = angular.module('myApp', ['ngSanitize']);
 var initApp = function($scope, $http){
 	$scope.elementsMap = {}
 	$scope.referencesMap = {}
+	$scope.referenceElementPaars = {}
 	build_request($scope)
 	exe_fn = new Exe_fn($scope, $http);
 	exe_fn.httpGet_j2c_table_db1_params_then_fn = function(params, then_fn){
@@ -70,21 +71,20 @@ var initEdit_table = function($scope, $http){
 	}
 }
 
-
 function readRef($scope){
 	console.log($scope.referencesMap)
 	angular.forEach($scope.referencesMap, function(v,k){
 		if(!v){
-			console.log(k)
+//			console.log(k)
 			readSql({
 				sql:sql_amk025.read_obj_from_docRoot(),
 				jsonId:k,
 				afterRead:function(response){
 					if(!$scope.referencesMap[k]){
-						console.log(k)
+//						console.log(k)
 						if(response.data.list[0]){
 							var jsonDoc = JSON.parse(response.data.list[0].docbody)
-							console.log(jsonDoc)
+//							console.log(jsonDoc)
 							json_elementsMap(jsonDoc.docRoot, $scope.elementsMap, $scope.referencesMap)
 						}
 					}
@@ -121,6 +121,114 @@ var writeSql = function(data){
 	})
 }
 
+var sql_1c = {}
+sql_1c.doc_read_elements_5 = function(){
+	return this.doc_read_elements() +
+	"(SELECT d5.doc_id FROM doc d, doc d0, doc d1, doc d2, doc d3, doc d4, doc d5 " +
+	"WHERE d.doc_id=:docId AND d0.parent=d.doc_id " +
+	"AND d1.parent=d0.doc_id " +
+	"AND d2.parent=d1.doc_id " +
+	"AND d3.parent=d2.doc_id " +
+	"AND d4.parent=d3.doc_id " +
+	"AND d5.parent=d4.doc_id " +
+	")"
+}
+sql_1c.doc_read_elements_4 = function(){
+	return this.doc_read_elements() +
+	"(SELECT d4.doc_id FROM doc d, doc d0, doc d1, doc d2, doc d3, doc d4 " +
+	"WHERE d.doc_id=:docId AND d0.parent=d.doc_id " +
+	"AND d1.parent=d0.doc_id " +
+	"AND d2.parent=d1.doc_id " +
+	"AND d3.parent=d2.doc_id " +
+	"AND d4.parent=d3.doc_id " +
+	")"
+}
+sql_1c.doc_read_elements_3 = function(){
+	return this.doc_read_elements() +
+	"(SELECT d3.doc_id FROM doc d, doc d0, doc d1, doc d2, doc d3 " +
+	"WHERE d.doc_id=:docId AND d0.parent=d.doc_id " +
+	"AND d1.parent=d0.doc_id " +
+	"AND d2.parent=d1.doc_id " +
+	"AND d3.parent=d2.doc_id " +
+	")"
+}
+sql_1c.doc_read_elements_2 = function(){
+	return this.doc_read_elements() +
+	"(SELECT d2.doc_id FROM doc d, doc d0, doc d1, doc d2 " +
+	"WHERE d.doc_id=:docId AND d0.parent=d.doc_id " +
+	"AND d1.parent=d0.doc_id " +
+	"AND d2.parent=d1.doc_id " +
+	")"
+}
+sql_1c.doc_read_elements_1 = function(){
+	return this.doc_read_elements() +
+	"(SELECT d1.doc_id FROM doc d, doc d0, doc d1 " +
+	"WHERE d.doc_id=:docId AND d0.parent=d.doc_id " +
+	"AND d1.parent=d0.doc_id " +
+	")"
+}
+sql_1c.doc_read_elements_0 = function(){
+	return this.doc_read_elements() +
+	"(SELECT d0.doc_id FROM doc d, doc d0 " +
+	"WHERE d.doc_id=:docId AND d0.parent=d.doc_id)"
+}
+
+sql_1c.doc_read_elements = function(){
+	return "SELECT * FROM doc " +
+	"\n LEFT JOIN (select value string, string_id from string) string ON string_id=doc_id " +
+	"\n LEFT JOIN (select value integer, integer_id from integer) integer ON integer_id=doc_id " +
+	"\n LEFT JOIN docbody ON docbody_id=doc_id " +
+	"LEFT JOIN sort ON sort_id=doc_id " +
+	"WHERE doc_id IN "
+}
+
+function JsonTree($scope, $http){
+	var readTreeLevel = function(level, elementId){
+		console.log(level)
+		readSql({
+			sql:sql_1c['doc_read_elements_'+level](),
+			docId:elementId,
+			afterRead:function(response){
+				var list = response.data.list
+				angular.forEach(list, function(el){
+					var p = $scope.elementsMap[el.parent]
+					if(!p.children) p.children = []
+					p.children.push(el)
+					mapElement(el)
+				})
+				if(list[0]){
+					readTreeLevel(++level, elementId)
+				}
+			}
+		})
+	}
+	var mapElement = function(element){
+		$scope.elementsMap[element.doc_id] = element
+		if(element.reference){
+			$scope.referenceElementPaars[element.reference] = element.doc_id
+		}
+		if(element.reference2){
+			console.log($scope.referenceElementPaars)
+			console.log("------read patient-------------")
+			console.log(element.reference2)
+			exe_fn.jsonTree.readTree(element.reference2)
+		}
+	}
+	this.readTree = function(elementId){
+		readSql({
+			sql:sql_1c.doc_read_elements()+" (" +elementId +")",
+			afterRead:function(response){
+				var el = response.data.list[0]
+				console.log(el)
+				if(el){
+					mapElement(el)
+					readTreeLevel(0, elementId)
+				}
+			}
+		})
+//		console.log(sql_1c.doc_read_elements_0())
+	}
+}
 
 function Exe_fn($scope, $http){
 	this.httpGet=function(progr_am){

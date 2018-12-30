@@ -40,7 +40,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 //			console.log($scope.patient_template)
 			json_elementsMap($scope.patient_template.docRoot, $scope.elementsMap, $scope.referencesMap)
 			readRef($scope)
-//			console.log($scope.patient_template.docRoot.join_select)
+			console.log($scope.patient_template.docRoot.join_select)
 			readSql({
 				sql:$scope.patient_template.docRoot.join_select,
 				afterRead:function(response){

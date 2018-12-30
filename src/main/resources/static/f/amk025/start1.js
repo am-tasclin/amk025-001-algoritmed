@@ -1,5 +1,8 @@
 app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	initApp($scope, $http)
+	console.log($scope.request.parameters)
+	exe_fn.jsonTree = new JsonTree($scope, $http)
+
 	readSql({
 		sql:sql_amk025.amk025_template(),
 		jsonId:85085,
@@ -8,6 +11,8 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 			console.log($scope.amk025_template)
 			json_elementsMap($scope.amk025_template.docRoot, $scope.elementsMap, $scope.referencesMap)
 			readRef($scope)
+			if($scope.request.parameters.amk)
+				exe_fn.jsonTree.readTree($scope.request.parameters.amk)
 		}
 	})
 	readSql({
