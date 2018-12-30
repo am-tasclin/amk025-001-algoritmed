@@ -11,6 +11,10 @@ var initApp = function($scope, $http){
 			then_fn : then_fn,
 	}	}
 
+	json_to_map = function(jsonDoc){
+		json_elementsMap(jsonDoc, $scope.elementsMap, $scope.referencesMap)
+	}
+
 }
 
 var initEdit_table = function($scope, $http){
