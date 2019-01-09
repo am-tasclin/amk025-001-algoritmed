@@ -8,6 +8,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		jsonId:85085,
 		afterRead:function(response){
 			$scope.amk025_template = JSON.parse(response.data.list[0].docbody)
+			console.log('amk')
 			console.log($scope.amk025_template)
 			json_elementsMap($scope.amk025_template.docRoot, $scope.elementsMap, $scope.referencesMap)
 			readRef($scope)

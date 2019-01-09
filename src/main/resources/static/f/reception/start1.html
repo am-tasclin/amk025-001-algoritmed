@@ -35,7 +35,9 @@
 							<tr class="w3-tiny w3-blue-gray">
 								<td>☰</td>
 								<td><i class="fa fa-id-card-o" aria-hidden="true"></i></td>
-								<th data-ng-repeat="col in patient_template.docRoot.children">
+								<th data-ng-repeat="col in patient_template.docRoot.children"
+								title="{{col}}"
+								>
 									{{col.value}}</th>
 							</tr>
 						</thead>
@@ -45,7 +47,11 @@
 								<td
 									data-ng-class="{'w3-green':row[rowAttName]==edit_table.selectedRow[rowAttName]}">
 								</td>
-								<td></td>
+								<td><a
+									href="/f/amk025/start1.html?l1=85089&amk={{row.amk}}"
+									class="w3-card " data-ng-if="row.amk"> <i
+										class="fa fa-id-card-o" aria-hidden="true"></i>
+								</a></td>
 								<td data-ng-repeat="col in patient_template.docRoot.children">
 									{{row['col_'+col.doc_id]?'':'&nbsp;'}}
 									{{row['col_'+col.doc_id]}}</td>

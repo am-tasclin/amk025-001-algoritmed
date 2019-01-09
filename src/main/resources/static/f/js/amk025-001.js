@@ -214,7 +214,9 @@ function JsonTree($scope, $http){
 			exe_fn.jsonTree.readTree(element.reference2)
 		}
 	}
+
 	this.readTree = function(elementId){
+		console.log(sql_1c.doc_read_elements()+" (" +elementId +")")
 		readSql({
 			sql:sql_1c.doc_read_elements()+" (" +elementId +")",
 			afterRead:function(response){
@@ -228,6 +230,7 @@ function JsonTree($scope, $http){
 		})
 //		console.log(sql_1c.doc_read_elements_0())
 	}
+
 }
 
 function Exe_fn($scope, $http){
