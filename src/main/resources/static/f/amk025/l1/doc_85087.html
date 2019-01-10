@@ -7,9 +7,9 @@
 				<div class="w3-dropdown-content w3-bar-block w3-border"
 					data-ng-class="{'w3-show':elementsMap[85094].open_dd}">
 					<a href="#" class="w3-bar-item w3-button"
-						data-ng-click="elementsMap[85094].description = gk.value"
+						data-ng-click="saveBloodGroup(gk, 85094);elementsMap[85094].description = gk.value"
 						data-ng-repeat="gk in elementsMap[85096].children">
-						{{gk.value}} </a>
+						{{gk.value}}</a>
 				</div>
 			</span>&nbsp;<span class="w3-border">
 				{{elementsMap[85094].description}}

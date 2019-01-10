@@ -3,6 +3,28 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	console.log($scope.request.parameters)
 	exe_fn.jsonTree = new JsonTree($scope, $http)
 
+	$scope.saveBloodGroup = function(o, amkElId){
+		console.log(o)
+		console.log(amkElId)
+		console.log($scope.elementsMap[amkElId])
+		logEnvirontment()
+	}
+
+	var logEnvirontment = function(){
+		console.log($scope.referenceElementPaars)
+		console.log($scope.referenceElementPaars[85089])
+		console.log($scope.elementsMap[$scope.referenceElementPaars[85089]])
+		console.log($scope.referenceElementPaars[$scope.request.parameters.l1])
+		console.log($scope.elementsMap[$scope.referenceElementPaars[$scope.request.parameters.l1]])
+		console.log('амк документ '+ $scope.request.parameters.amk)
+		console.log($scope.elementsMap[$scope.request.parameters.amk])
+		console.log($scope.elementsMap[85086])
+		console.log($scope.elementsMap[$scope.request.parameters.l1])
+		console.log('пацієнт')
+		console.log($scope.elementsMap[85256])
+	}
+		
+	
 	readSql({
 		sql:sql_amk025.amk025_template(),
 		jsonId:85085,

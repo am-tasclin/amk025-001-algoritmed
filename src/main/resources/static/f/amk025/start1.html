@@ -19,9 +19,10 @@
 	<h1 class="w3-container w3-small">
 		<span data-ng-include="'/f/home-link.html'"></span> Електронна медична
 		картка амбулаторного хворого (форма № 025/о)
+		<span class="am-b" data-ng-include="'/f/amk025/l1/pip.html'">
+			</span>
 	</h1>
 	<div data-ng-include="'/f/mdoc-process-links.html'"></div>
-	
 	<div data-ng-repeat="o_1 in [elementsMap[request.parameters.l1]]"
 		data-ng-include="'/f/amk025/l1/doc_part.html'"></div>
 </body>

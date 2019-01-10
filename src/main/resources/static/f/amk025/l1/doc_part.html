@@ -5,8 +5,7 @@
 			<span class="am-no-print w3-large"> ☰ </span> &nbsp; {{o_1.value}}
 			<div class="w3-dropdown-content w3-bar-block w3-border w3-tiny"
 				style="left: -50px; width: 400px">
-
-				<a data-ng-href="?l1={{amk025_l1.doc_id}}#l1_{{amk025_l1.doc_id}}"
+				<a data-ng-href="?l1={{amk025_l1.doc_id}}&amk={{request.parameters.amk}}#l1_{{amk025_l1.doc_id}}"
 					class="w3-bar-item w3-button"
 					data-ng-repeat="amk025_l1 in amk025_template.docRoot.children">
 					{{amk025_l1.value}}</a>
