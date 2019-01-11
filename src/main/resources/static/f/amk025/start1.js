@@ -7,7 +7,37 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		console.log(o)
 		console.log(amkElId)
 		console.log($scope.elementsMap[amkElId])
-		logEnvirontment()
+//		logEnvirontment()
+		var dataElement = {
+			reference:amkElId,
+			reference2:o.doc_id,
+			sql:"INSERT INTO doc (doctype, doc_id, parent, reference, reference2) " +
+				" VALUES (18, :nextDbId1, :parent, :reference, :reference2);",
+			dataAfterSave:function(response){
+				console.log(response)
+			}
+		}
+		var amkPartEl = $scope.elementsMap[$scope.referenceElementPaars[$scope.request.parameters.l1]]
+		if(!amkPartEl){
+			var dataParentElement = {
+				parent:$scope.request.parameters.amk,
+				reference:$scope.request.parameters.l1,
+				sql:"INSERT INTO doc (doctype, doc_id, parent, reference) VALUES (18, :nextDbId1, :parent, :reference);",
+				dataAfterSave:function(response){
+					console.log(response)
+					console.log(response.data)
+					console.log(response.data.nextDbId1)
+					dataElement.parent = response.data.nextDbId1
+					writeSql(dataElement)
+				},
+			}
+			console.log(dataParentElement)
+			writeSql(dataParentElement)
+		}else{
+			console.log(123)
+			dataElement.parent = amkPartEl.doc_id
+			writeSql(dataElement)
+		}
 	}
 
 	var logEnvirontment = function(){

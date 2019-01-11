@@ -9,11 +9,15 @@
 					<a href="#" class="w3-bar-item w3-button"
 						data-ng-click="saveBloodGroup(gk, 85094);elementsMap[85094].description = gk.value"
 						data-ng-repeat="gk in elementsMap[85096].children">
-						{{gk.value}}</a>
+						{{gk.value}}
+						{{gk.doc_id}}
+						</a>
 				</div>
 			</span>&nbsp;<span class="w3-border">
+				{{elementsMap[elementsMap[referenceElementPaars[85094]].reference2].string}}
 				{{elementsMap[85094].description}}
-				{{elementsMap[85094].description?'':'____'}} </span> &nbsp; <span
+				{{elementsMap[85094].description
+				||elementsMap[elementsMap[referenceElementPaars[85094]].reference2]?'':'____'}} </span> &nbsp; <span
 				class="am-b w3-tiny w3-dropdown-click"
 				data-ng-click="elementsMap[85095].open_dd=!elementsMap[85095].open_dd">
 				{{elementsMap[85095].value}}:
