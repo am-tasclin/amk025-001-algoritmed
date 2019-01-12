@@ -34,7 +34,6 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 			console.log(dataParentElement)
 			writeSql(dataParentElement)
 		}else{
-			console.log(dataElement)
 			var patientAmkEl = $scope.elementsMap[$scope.referenceElementPaars[amkElId]]
 			console.log(patientAmkEl)
 			if(patientAmkEl){//UPDATE
@@ -43,6 +42,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 			}else{//INSERT
 				dataElement.parent = amkPartEl.doc_id
 			}
+			console.log(dataElement)
 			writeSql(dataElement)
 		}
 	}

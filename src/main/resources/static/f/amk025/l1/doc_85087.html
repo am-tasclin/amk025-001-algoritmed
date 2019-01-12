@@ -24,13 +24,15 @@
 				<div class="w3-dropdown-content w3-bar-block w3-border"
 					data-ng-class="{'w3-show':elementsMap[85095].open_dd}">
 					<a href="#" class="w3-bar-item w3-button"
-						data-ng-click="elementsMap[85095].description = gk.value"
+						data-ng-click="saveBloodGroup(gk, 85095);elementsMap[85095].description = gk.value"
 						data-ng-repeat="gk in elementsMap[85101].children">
 						{{gk.value}} </a>
 				</div>
 			</span> &nbsp;<span class="w3-border">
+				{{elementsMap[elementsMap[referenceElementPaars[85095]].reference2].string}}
 				{{elementsMap[85095].description}}
-				{{elementsMap[85095].description?'':'____'}} </span>
+				{{elementsMap[85095].description
+				||elementsMap[elementsMap[referenceElementPaars[85095]].reference2]?'':'____'}} </span>
 		</div>
 		<div class="w3-rest">
 			<span class="am-b w3-tiny w3-dropdown-click"
