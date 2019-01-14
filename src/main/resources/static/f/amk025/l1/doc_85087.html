@@ -7,7 +7,7 @@
 				<div class="w3-dropdown-content w3-bar-block w3-border"
 					data-ng-class="{'w3-show':elementsMap[85094].open_dd}">
 					<a href="#" class="w3-bar-item w3-button"
-						data-ng-click="saveBloodGroup(gk, 85094);elementsMap[85094].description = gk.value"
+						data-ng-click="saveDataReference2(gk, 85094);elementsMap[85094].description = gk.value"
 						data-ng-repeat="gk in elementsMap[85096].children">
 						{{gk.value}}
 						{{gk.doc_id}}
@@ -24,7 +24,7 @@
 				<div class="w3-dropdown-content w3-bar-block w3-border"
 					data-ng-class="{'w3-show':elementsMap[85095].open_dd}">
 					<a href="#" class="w3-bar-item w3-button"
-						data-ng-click="saveBloodGroup(gk, 85095);elementsMap[85095].description = gk.value"
+						data-ng-click="saveDataReference2(gk, 85095);elementsMap[85095].description = gk.value"
 						data-ng-repeat="gk in elementsMap[85101].children">
 						{{gk.value}} </a>
 				</div>
@@ -36,8 +36,11 @@
 		</div>
 		<div class="w3-rest">
 			<span class="am-b w3-tiny w3-dropdown-click"
-				data-ng-click="elementsMap[85105].open_dd=!elementsMap[85105].open_dd">
-				{{elementsMap[85105].value}}: </span>
+				data-ng-class="{'w3-green':85105==elementNoteDialog.o.doc_id}"
+				data-ng-click="elementNoteDialog.open(elementsMap[85105])">
+				{{elementsMap[85105].value}}: </span> <a href="#"
+				data-ng-click="elementNoteDialog.open(elementsMap[85105])">
+				{{elementsMap[referenceElementPaars[85105]].docbody}}</a>
 		</div>
 	</div>
 	<div class="w3-row"
@@ -45,11 +48,13 @@
 
 		<div class="w3-col " style="width: 20%">
 			<span class="am-b w3-tiny w3-dropdown-click"
-				data-ng-click="elementsMap[elId].open_dd=!elementsMap[elId].open_dd">
+			data-ng-class="{'w3-green':elId==elementNoteDialog.o.doc_id}"
+				data-ng-click="elementNoteDialog.open(elementsMap[elId])">
 				{{elementsMap[elId].value}}: </span>
 		</div>
 		<div class="w3-rest w3-border">
-		
+			<a href="#" data-ng-click="elementNoteDialog.open(elementsMap[elId])">
+				{{elementsMap[referenceElementPaars[elId]].docbody}}</a>
 		</div>
 	</div>
 	{{stop_o}}

@@ -87,7 +87,12 @@
 				</div>
 				<div data-ng-repeat="col in patient_template.docRoot.children">
 					<div class="w3-tiny am-b" title="{{col.doc_id}}">{{col.value}}</div>
+					<div
+					class="w3-border"
+					data-ng-if="85370==col.doc_id"
+					>inDevelopment</div>
 					<input class="w3-border"
+					data-ng-if="85370!=col.doc_id"
 						data-ng-model="edit_table.editRow['col_'+col.doc_id]"
 						data-ng-disabled="!edit_table.editRow" />
 				</div>

@@ -36,16 +36,26 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		sql:sql_amk025.amk025_template(),
 		jsonId:85242,
 		afterRead:function(response){
+			console.log(response.data)
 			$scope.patient_template = JSON.parse(response.data.list[0].docbody)
-//			console.log($scope.patient_template)
+			console.log($scope.patient_template)
 			json_elementsMap($scope.patient_template.docRoot, $scope.elementsMap, $scope.referencesMap)
 			readRef($scope)
+		}
+	})
+	readSql({
+		sql:sql_amk025.read_sql_from_docRoot(),
+		jsonId:85242,
+		tableId:85243,
+		afterRead:function(response){
+//			console.log(response.data.list[0].docbody)
 			var sql = "SELECT * FROM (" +
-			$scope.patient_template.docRoot.join_select +
+			response.data.list[0].docbody +
+//			$scope.patient_template.docRoot.join_select +
 			") x " +
 			" LEFT JOIN (SELECT d2.parent amk, d1.reference2 FROM doc d1, doc d2 WHERE d2.doc_id=d1.parent) y " +
 			" ON y.reference2 = x.row_85243_id"
-			console.log(sql)
+//			console.log(sql)
 			readSql({
 				sql:sql,
 				afterRead:function(response){

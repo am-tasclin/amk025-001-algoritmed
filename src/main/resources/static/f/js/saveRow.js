@@ -14,6 +14,7 @@ var Init_saveRow = function ($scope, $http, tableId){
 		console.log(this.tableId)
 		console.log($scope.elementsMap)
 		console.log(editRow)
+		console.log(this.tableId)
 		var tableEl = $scope.elementsMap[this.tableId]
 		console.log(tableEl)
 		angular.forEach(tableEl.children, function(vt,k){

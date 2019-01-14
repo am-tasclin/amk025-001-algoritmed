@@ -2,8 +2,78 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	initApp($scope, $http)
 	console.log($scope.request.parameters)
 	exe_fn.jsonTree = new JsonTree($scope, $http)
+	
+	$scope.elementNoteDialog = {
+		elementId:0, style:{display:'none'},
+		save:function(){
+			$scope.saveDataDocbody(this)
+		},
+		close:function(){
+			this.style		= {display:'none'}
+		},
+		open:function(o){
+			console.log(this)
+			this.o				= o
+			this.elementId		= o.doc_id
+			this.style			= {display:'block'}
+			var amkElId			= o.doc_id
+			var patientAmkEl	= $scope.elementsMap[$scope.referenceElementPaars[amkElId]]
+			if(patientAmkEl){
+				this.note		= patientAmkEl.docbody
+			}else{
+				delete this.note
+			}
+		},
+	}
 
-	$scope.saveBloodGroup = function(o, amkElId){
+	$scope.saveDataDocbody = function(colO){
+		console.log($scope.elementsMap[$scope.request.parameters.amk])
+		console.log(colO)
+		var amkElId = colO.o.doc_id
+		console.log(amkElId)
+		console.log($scope.elementsMap[amkElId])
+//		logEnvirontment()
+		var dataElement = {
+			docbody:colO.note,
+			reference:amkElId,
+			sql:"INSERT INTO doc (doctype, doc_id, parent, reference) " +
+				" VALUES (18, :nextDbId1, :parent, :reference); " +
+				"INSERT INTO docbody (docbody_id, docbody) VALUES (:nextDbId1, :docbody); ",
+			dataAfterSave:function(response){
+				console.log(response)
+			}
+		}
+		var amkPartEl = $scope.elementsMap[$scope.referenceElementPaars[$scope.request.parameters.l1]]
+		if(!amkPartEl){//INSERT part element
+			var dataParentElement = {
+				parent:$scope.request.parameters.amk,
+				reference:$scope.request.parameters.l1,
+				sql:"INSERT INTO doc (doctype, doc_id, parent, reference) VALUES (18, :nextDbId1, :parent, :reference);",
+				dataAfterSave:function(response){
+					console.log(response)
+					console.log(response.data)
+					console.log(response.data.nextDbId1)
+					dataElement.parent = response.data.nextDbId1
+					writeSql(dataElement)
+				},
+			}
+			console.log(dataParentElement)
+			writeSql(dataParentElement)
+		}else{
+			var patientAmkEl = $scope.elementsMap[$scope.referenceElementPaars[amkElId]]
+			console.log(patientAmkEl)
+			if(patientAmkEl){//UPDATE
+				dataElement.docbody_id = patientAmkEl.doc_id
+				dataElement.sql = "UPDATE docbody SET docbody=:docbody WHERE docbody_id=:docbody_id"
+			}else{//INSERT
+				dataElement.parent = amkPartEl.doc_id
+			}
+			console.log(dataElement)
+			writeSql(dataElement)
+		}
+	}
+
+	$scope.saveDataReference2 = function(o, amkElId){
 		console.log(o)
 		console.log(amkElId)
 		console.log($scope.elementsMap[amkElId])
@@ -60,7 +130,6 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		console.log('пацієнт')
 		console.log($scope.elementsMap[85256])
 	}
-		
 	
 	readSql({
 		sql:sql_amk025.amk025_template(),
@@ -75,6 +144,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 				exe_fn.jsonTree.readTree($scope.request.parameters.amk)
 		}
 	})
+	
 	readSql({
 		sql:sql_amk025.amk025_template(),
 		jsonId:5036,
@@ -85,10 +155,10 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		}
 	})
 	
+	readAmk($scope)
+	
 })
 
-sql_amk025.read_obj_from_docRoot = function(){
-	return "SELECT * FROM doc d2, doc d1,docbody " +
-	"WHERE d1.doc_id=docbody_id AND d2.doc_id=d1.parent AND d2.doctype IN (6,17) AND d1.reference " +
-	" IN (SELECT parent FROM doc where doc_id=:jsonId)"
+readAmk = function($scope){
+	console.log(123)
 }
