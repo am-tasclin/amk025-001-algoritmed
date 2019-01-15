@@ -94,7 +94,21 @@ function readRef($scope){
 	})
 }
 
+function replaceParams(params){
+	angular.forEach(params.sql.split(':'), function(v,k){
+		if(k>0){
+			var p = v.split(' ')[0].replace(')','')
+			var pv = params[p]
+//			console.log(p+' = '+pv)
+			params.sql = params.sql.replace(':'+p,pv)
+		}
+	})
+//	console.log(params)
+//	console.log(params.sql)
+}
+
 function readSql(params, obj){
+	replaceParams(params)
 	if(!obj) obj = params
 	exe_fn.httpGet(exe_fn.httpGet_j2c_table_db1_params_then_fn(
 	params,
@@ -107,7 +121,6 @@ function readSql(params, obj){
 		}
 	}))
 }
-
 
 var writeSql = function(data){
 	exe_fn.httpPost
@@ -176,7 +189,7 @@ sql_1c.doc_read_elements_0 = function(){
 sql_1c.doc_read_elements = function(){
 	return "SELECT * FROM doc " +
 	"\n LEFT JOIN (select value string, string_id from string) string ON string_id=doc_id " +
-	"\n LEFT JOIN (select value integer, integer_id from integer) integer ON integer_id=doc_id " +
+	"\n LEFT JOIN (select value vinteger, integer_id from integer) integer ON integer_id=doc_id " +
 	"\n LEFT JOIN docbody ON docbody_id=doc_id " +
 	"LEFT JOIN sort ON sort_id=doc_id " +
 	"WHERE doc_id IN "
@@ -184,7 +197,7 @@ sql_1c.doc_read_elements = function(){
 
 function JsonTree($scope, $http){
 	var readTreeLevel = function(level, elementId){
-		console.log(level)
+//		console.log(level)
 		readSql({
 			sql:sql_1c['doc_read_elements_'+level](),
 			docId:elementId,
@@ -208,8 +221,8 @@ function JsonTree($scope, $http){
 			$scope.referenceElementPaars[element.reference] = element.doc_id
 		}
 		if(element.reference2){
-			console.log($scope.referenceElementPaars)
-			console.log("------read reference2 -------------")
+//			console.log($scope.referenceElementPaars)
+//			console.log("------read reference2 -------------")
 			console.log(element.reference2)
 			exe_fn.jsonTree.readTree(element.reference2)
 		}
@@ -221,7 +234,7 @@ function JsonTree($scope, $http){
 			sql:sql_1c.doc_read_elements()+" (" +elementId +")",
 			afterRead:function(response){
 				var el = response.data.list[0]
-				console.log(el)
+//				console.log(el)
 				if(el){
 					mapElement(el)
 					readTreeLevel(0, elementId)

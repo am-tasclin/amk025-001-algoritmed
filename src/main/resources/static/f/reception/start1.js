@@ -43,6 +43,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 			readRef($scope)
 		}
 	})
+
 	readSql({
 		sql:sql_amk025.read_sql_from_docRoot(),
 		jsonId:85242,
