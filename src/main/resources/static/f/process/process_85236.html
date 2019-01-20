@@ -29,10 +29,12 @@
 							class="w3-hover-shadow" data-ng-switch="o1.value"> <span
 							data-ng-switch-when="AND">,</span> <span data-ng-switch-when="OR">|</span>
 							<span data-ng-switch-when="age"
-							data-ng-class="{'w3-green':calcAgeGroup(o1)}"> вік
-								<span data-ng-repeat="o2 in o1.children"> {{o2.value}}</span>
-						</span> <span data-ng-switch-default> {{o1.value}} <span
+							data-ng-class="{'w3-green':calcAgeGroup(o1)}"> вік <span
 								data-ng-repeat="o2 in o1.children"> {{o2.value}}</span>
+						</span> <span data-ng-switch-when="Стать"
+							data-ng-class="{'w3-green':isGender(o1)}">
+								{{o1.value}} <span data-ng-repeat="o2 in o1.children">
+									{{o2.value}}</span>
 						</span></span>
 					</div>
 				</td>

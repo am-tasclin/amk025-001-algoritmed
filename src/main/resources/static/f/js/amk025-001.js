@@ -4,6 +4,11 @@ var initApp = function($scope, $http){
 	$scope.referencesMap = {}
 	$scope.referenceElementPaars = {}
 	build_request($scope)
+	$scope.fn = {}
+	$scope.fn.getTimestamp = function(ts){
+		var d = new Date(ts)
+		return d
+	}
 	exe_fn = new Exe_fn($scope, $http);
 	exe_fn.httpGet_j2c_table_db1_params_then_fn = function(params, then_fn){
 		return {
@@ -16,6 +21,14 @@ var initApp = function($scope, $http){
 		json_elementsMap(jsonDoc, $scope.elementsMap, $scope.referencesMap)
 	}
 
+	$scope.isGender = function (o){
+		if($scope.referenceElementPaars[85370]){
+			var gender = $scope.elementsMap[$scope.elementsMap[$scope.referenceElementPaars[85370]].reference2]
+			if(gender){
+				return eval('"'+gender.string + '"=="' +o.children[1].value+'"')
+			}
+		}
+	}
 	$scope.calcAgeGroup = function (o){
 		var age = $scope.getAgeOfPatient()
 		return eval(age+o.children[0].value+o.children[1].value)
@@ -104,7 +117,7 @@ function readRef($scope){
 //						console.log(k)
 						if(response.data.list[0]){
 							var jsonDoc = JSON.parse(response.data.list[0].docbody)
-//							console.log(jsonDoc)
+							console.log(jsonDoc)
 							json_elementsMap(jsonDoc.docRoot, $scope.elementsMap, $scope.referencesMap)
 						}
 					}
@@ -115,14 +128,18 @@ function readRef($scope){
 }
 
 function replaceParams(params){
+//	console.log(params.sql)
 	angular.forEach(params.sql.split(':'), function(v,k){
 		if(k>0){
-			var p = v.split(' ')[0].replace(')','')
+			var p = v.split(' ')[0].replace(')','').replace(',','').replace(';','').trim()
 			var pv = params[p]
 //			console.log(p+' = '+pv)
-			params.sql = params.sql.replace(':'+p,pv)
+			if(pv){
+				params.sql = params.sql.replace(':'+p, "'"+pv+"'")
+			}
 		}
 	})
+//	console.log(params.ts_value)
 //	console.log(params)
 //	console.log(params.sql)
 }
@@ -143,6 +160,7 @@ function readSql(params, obj){
 }
 
 var writeSql = function(data){
+	replaceParams(data)
 	exe_fn.httpPost
 	({	url:'/r/url_sql_read_db1',
 		then_fn:function(response) {
@@ -208,9 +226,10 @@ sql_1c.doc_read_elements_0 = function(){
 
 sql_1c.doc_read_elements = function(){
 	return "SELECT * FROM doc " +
-	"\n LEFT JOIN (select value string, string_id from string) string ON string_id=doc_id " +
-	"\n LEFT JOIN (select value date, date_id from date) date ON date_id=doc_id " +
-	"\n LEFT JOIN (select value vinteger, integer_id from integer) integer ON integer_id=doc_id " +
+	"\n LEFT JOIN (SELECT value string, string_id FROM string) string ON string_id=doc_id " +
+	"\n LEFT JOIN (SELECT value date, date_id FROM date) date ON date_id=doc_id " +
+	"\n LEFT JOIN (SELECT value ts, timestamp_id FROM timestamp) timestamp ON timestamp_id=doc_id " +
+	"\n LEFT JOIN (SELECT value vinteger, integer_id FROM integer) integer ON integer_id=doc_id " +
 	"\n LEFT JOIN docbody ON docbody_id=doc_id " +
 	"LEFT JOIN sort ON sort_id=doc_id " +
 	"WHERE doc_id IN "

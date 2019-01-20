@@ -26,16 +26,23 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr data-ng-repeat="row in [1,2,3,4,5]"
-				data-ng-init="rowIndex = $index">
+			<tr
+				data-ng-repeat="row in elementsMap[referenceElementPaars[85116]].children">
+				<td>{{fn.getTimestamp(row.sort) | date:'short'}}</td>
+				<td></td>
+				<td class="w3-border w3-border-black"><a href="#">
+						{{row.docbody}} {{!row.docbody?'нотатки':''}} </a></td>
+				<td class="w3-border w3-border-black"></td>
+			</tr>
+			<tr data-ng-repeat="row in [1]" data-ng-init="rowIndex = $index">
 				<td class="w3-border w3-border-black"
 					data-ng-init="colIndex = $index"
 					data-ng-repeat="col in elementsMap[85182].children"><span
 					data-ng-if="0==colIndex"> {{row.value}} </span> &nbsp; <a href="#"
-					class="w3-hover-shadow am-no-print"
+					data-ng-click="addDaybook()" class="w3-hover-shadow am-no-print"
 					data-ng-if="rowIndex==0&&colIndex==0"> <i class="fa fa-plus"
-						aria-hidden="true"></i> <span class="w3-tiny">
-							Щоденник за … </a> </span></td>
+						aria-hidden="true"></i> <span class="w3-tiny"> Щоденник за
+							… </a> </span></td>
 			</tr>
 		</tbody>
 	</table>
