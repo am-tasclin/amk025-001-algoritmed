@@ -24,9 +24,16 @@
 						{{1+$index}}. {{o.value}}</div></td>
 				<td class="w3-border">
 					<div data-ng-repeat="o in n.children[0].children[1].children"
-						class="w3-hover-shadow">
-						{{o.value}} <span data-ng-repeat="o1 in o.children">
-							{{o1.value}} </span>
+						class="w3-hover-shadow" data-ng-if="'if'==o.value">
+						{{o.value111}}<span data-ng-repeat="o1 in o.children"
+							class="w3-hover-shadow" data-ng-switch="o1.value"> <span
+							data-ng-switch-when="AND">,</span> <span data-ng-switch-when="OR">|</span>
+							<span data-ng-switch-when="age"
+							data-ng-class="{'w3-green':calcAgeGroup(o1)}"> вік
+								<span data-ng-repeat="o2 in o1.children"> {{o2.value}}</span>
+						</span> <span data-ng-switch-default> {{o1.value}} <span
+								data-ng-repeat="o2 in o1.children"> {{o2.value}}</span>
+						</span></span>
 					</div>
 				</td>
 				<td class="w3-border">

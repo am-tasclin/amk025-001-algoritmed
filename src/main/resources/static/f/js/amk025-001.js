@@ -16,6 +16,26 @@ var initApp = function($scope, $http){
 		json_elementsMap(jsonDoc, $scope.elementsMap, $scope.referencesMap)
 	}
 
+	$scope.calcAgeGroup = function (o){
+		var age = $scope.getAgeOfPatient()
+		return eval(age+o.children[0].value+o.children[1].value)
+	}
+	$scope.getAgeOfPatient = function (){
+		if($scope.referenceElementPaars[85247]){
+			var d1 = $scope.elementsMap[$scope.referenceElementPaars[85247]].date
+			return $scope.getAge(d1)
+		}
+	}
+
+	$scope.getAge = function (d1, d2){
+		if(d1){
+			dd1=new Date(d1)
+			d2 = d2 || new Date();
+			var diff = d2.getTime() - dd1.getTime();
+			return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+		}
+	}
+	
 }
 
 var initEdit_table = function($scope, $http){
@@ -189,6 +209,7 @@ sql_1c.doc_read_elements_0 = function(){
 sql_1c.doc_read_elements = function(){
 	return "SELECT * FROM doc " +
 	"\n LEFT JOIN (select value string, string_id from string) string ON string_id=doc_id " +
+	"\n LEFT JOIN (select value date, date_id from date) date ON date_id=doc_id " +
 	"\n LEFT JOIN (select value vinteger, integer_id from integer) integer ON integer_id=doc_id " +
 	"\n LEFT JOIN docbody ON docbody_id=doc_id " +
 	"LEFT JOIN sort ON sort_id=doc_id " +
