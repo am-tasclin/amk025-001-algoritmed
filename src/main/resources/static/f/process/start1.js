@@ -3,8 +3,39 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	console.log($scope.request.parameters)
 	exe_fn.jsonTree = new JsonTree($scope, $http)
 
+	var calcIf = function(o){
+		var ifIs = true
+		angular.forEach(o.children, function(v, k){
+			console.log(v.calcIf+'/'+v.value)
+			if(v.calcIf !== undefined){
+				ifIs = ifIs && v.calcIf
+			}
+		})
+		o.ifIs = ifIs
+	}
+
+	var lcalcAllIfs = $interval( function(){ calcAllIfs(); }, 2000)
+	var calcAllIfs = function(){
+		console.log('---calc all Ifs-3------')
+		angular.forEach($scope.process_85236.children, function(v){
+			if(v.children){
+				var allIfs = false
+				var ifsElemnt = v.children[0].children[1]
+				angular.forEach(ifsElemnt.children, function(v2){
+					calcIf(v2)
+					if(v2.ifIs !== undefined){
+						allIfs = allIfs || v2.ifIs
+					}
+				})
+				console.log(allIfs)
+				ifsElemnt.allIfs = allIfs
+			}
+		})
+		$interval.cancel(lcalcAllIfs)
+	}
+
 	if($scope.request.parameters.amk){
-		exe_fn.jsonTree.readTree($scope.request.parameters.amk)
+		exe_fn.jsonTree.readTree($scope.request.parameters.amk, 'amkData')
 	}
 
 	readSql({

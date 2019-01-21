@@ -25,13 +25,18 @@ var initApp = function($scope, $http){
 		if($scope.referenceElementPaars[85370]){
 			var gender = $scope.elementsMap[$scope.elementsMap[$scope.referenceElementPaars[85370]].reference2]
 			if(gender){
-				return eval('"'+gender.string + '"=="' +o.children[1].value+'"')
+				var evl = eval('"'+gender.string + '"=="' +o.children[1].value+'"')
+				o.calcIf = evl
+				return o.calcIf
 			}
 		}
 	}
+
 	$scope.calcAgeGroup = function (o){
 		var age = $scope.getAgeOfPatient()
-		return eval(age+o.children[0].value+o.children[1].value)
+		var evl = eval(age+o.children[0].value+o.children[1].value)
+		o.calcIf = evl
+		return o.calcIf
 	}
 	$scope.getAgeOfPatient = function (){
 		if($scope.referenceElementPaars[85247]){
@@ -255,6 +260,7 @@ function JsonTree($scope, $http){
 			}
 		})
 	}
+
 	var mapElement = function(element){
 		$scope.elementsMap[element.doc_id] = element
 		if(element.reference){
@@ -268,7 +274,7 @@ function JsonTree($scope, $http){
 		}
 	}
 
-	this.readTree = function(elementId){
+	this.readTree = function(elementId, docName){
 //		console.log(sql_1c.doc_read_elements()+" (" +elementId +")")
 		readSql({
 			sql:sql_1c.doc_read_elements()+" (" +elementId +")",
@@ -278,6 +284,9 @@ function JsonTree($scope, $http){
 				if(el){
 					mapElement(el)
 					readTreeLevel(0, elementId)
+					if(docName){
+						$scope[docName] = el
+					}
 				}
 			}
 		})

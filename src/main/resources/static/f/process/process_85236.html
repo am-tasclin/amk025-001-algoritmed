@@ -1,56 +1,79 @@
 <div>
-	{{process_85236.value}}
 	<table class="am-amk025-table">
-		<thead data-ng-repeat="h in [process_85236.children[0]]"
-		class="am-b w3-small"
-		>
-			<tr>
-				<th class="w3-border" rowspan="2">{{h.value}}</th>
-				<th class="w3-border" colspan="2">{{h.children[0].value}}</th>
-				<th class="w3-border" rowspan="2">{{h.children[1].value}}</th>
-				<th class="w3-border" rowspan="2">{{h.children[2].value}}</th>
+	<colgroup>
+			<col width="35%">
+			<col width="65%">
+		</colgroup>
+		<tr>
+			<th>дія</th>
 			</tr>
-			<tr>
-				<th class="w3-border">{{h.children[0].children[0].value}}</th>
-				<th class="w3-border">{{h.children[0].children[1].value}}</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr data-ng-repeat="n in process_85236.children"
-				data-ng-if="$index>0">
-				<td class="w3-border">{{n.value}}</td>
-				<td class="w3-border"><div class="w3-hover-shadow"
-						data-ng-repeat="o in n.children[0].children[0].children">
-						{{1+$index}}. {{o.value}}</div></td>
-				<td class="w3-border">
-					<div data-ng-repeat="o in n.children[0].children[1].children"
-						class="w3-hover-shadow" data-ng-if="'if'==o.value">
-						{{o.value111}}<span data-ng-repeat="o1 in o.children"
-							class="w3-hover-shadow" data-ng-switch="o1.value"> <span
-							data-ng-switch-when="AND">,</span> <span data-ng-switch-when="OR">|</span>
-							<span data-ng-switch-when="age"
-							data-ng-class="{'w3-green':calcAgeGroup(o1)}"> вік <span
-								data-ng-repeat="o2 in o1.children"> {{o2.value}}</span>
-						</span> <span data-ng-switch-when="Стать"
-							data-ng-class="{'w3-green':isGender(o1)}">
-								{{o1.value}} <span data-ng-repeat="o2 in o1.children">
-									{{o2.value}}</span>
-						</span></span>
-					</div>
-				</td>
-				<td class="w3-border">
-					<div data-ng-repeat="o in n.children[1].children"
-						class="w3-hover-shadow">{{1+$index}}. {{o.value}}</div>
-				</td>
-				<td class="w3-border">{{n.children[2].children[0].value}} <span
-					data-ng-if="'if'==n.children[2].children[0].children[0].value"
-					class="w3-hover-shadow">
-						{{n.children[2].children[0].children[0].value}} <span
-						data-ng-repeat="o1 in n.children[2].children[0].children[0].children">
-							{{o1.value}} </span>
-				</span>
-				</td>
-			</tr>
-		</tbody>
+		<tr>
+			<td>
+				<div data-ng-repeat="n in process_85236.children"
+					data-ng-if="$index>0">
+					<div data-ng-repeat="ifsElemnt in [n.children[0].children[1]]"
+						class="w3-border" data-ng-if="ifsElemnt.allIfs">
+						{{n.doc_id}} - {{n.value}}</div>
+
+				</div>
+			</td>
+			<td>{{process_85236.value}}
+
+				<table class="am-amk025-table">
+					<thead data-ng-repeat="h in [process_85236.children[0]]"
+						class="am-b w3-small">
+						<tr>
+							<th class="w3-border" rowspan="2">{{h.value}}</th>
+							<th class="w3-border" colspan="2">{{h.children[0].value}}</th>
+							<th class="w3-border" rowspan="2">{{h.children[1].value}}</th>
+							<th class="w3-border" rowspan="2">{{h.children[2].value}}</th>
+						</tr>
+						<tr>
+							<th class="w3-border">{{h.children[0].children[0].value}}</th>
+							<th class="w3-border">{{h.children[0].children[1].value}}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr data-ng-repeat="n in process_85236.children"
+							data-ng-if="$index>0">
+							<td class="w3-border">{{n.value}}</td>
+							<td class="w3-border"><div class="w3-hover-shadow"
+									data-ng-repeat="o in n.children[0].children[0].children">
+									{{1+$index}}. {{o.value}}</div></td>
+							<td class="w3-border">a2
+								<div data-ng-repeat="o in n.children[0].children[1].children"
+									class="w3-hover-shadow" data-ng-if="'if'==o.value">
+									{{o.value111}}<span data-ng-repeat="o1 in o.children"
+										class="w3-hover-shadow" data-ng-switch="o1.value"> <span
+										data-ng-switch-when="AND">,</span> <span
+										data-ng-switch-when="OR">|</span> <span
+										data-ng-switch-when="age"
+										data-ng-class="{'w3-green':calcAgeGroup(o1)}"> вік <span
+											data-ng-repeat="o2 in o1.children"> {{o2.value}}</span>
+									</span> <span data-ng-switch-when="Стать"
+										data-ng-class="{'w3-green':isGender(o1)}"> {{o1.value}}
+											<span data-ng-repeat="o2 in o1.children"> {{o2.value}}</span>
+									</span></span>
+								</div>
+							</td>
+							<td class="w3-border">
+								<div data-ng-repeat="o in n.children[1].children"
+									class="w3-hover-shadow">{{1+$index}}. {{o.value}}</div>
+							</td>
+							<td class="w3-border">{{n.children[2].children[0].value}} <span
+								data-ng-if="'if'==n.children[2].children[0].children[0].value"
+								class="w3-hover-shadow">
+									{{n.children[2].children[0].children[0].value}} <span
+									data-ng-repeat="o1 in n.children[2].children[0].children[0].children">
+										{{o1.value}} </span>
+							</span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+			</td>
+		</tr>
 	</table>
+
 </div>
