@@ -14,6 +14,10 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		o.ifIs = ifIs
 	}
 
+	$scope.savePlanAction = function(o){
+		console.log(o)
+	}
+
 	var lcalcAllIfs = $interval( function(){ calcAllIfs(); }, 2000)
 	var calcAllIfs = function(){
 		console.log('---calc all Ifs-3------')

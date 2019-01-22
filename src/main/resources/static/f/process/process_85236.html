@@ -1,20 +1,29 @@
 <div>
-	<table class="am-amk025-table">
-	<colgroup>
-			<col width="35%">
-			<col width="65%">
+	<table class="am-amk025-table" style="border-collapse: separate;">
+		<colgroup>
+			<col width="30%">
+			<col width="70%">
 		</colgroup>
-		<tr>
-			<th>дія</th>
-			</tr>
+		<tr class="w3-tiny w3-blue-gray">
+			<th>завдання - дія</th>
+			<th>план</th>
+		</tr>
 		<tr>
 			<td>
 				<div data-ng-repeat="n in process_85236.children"
 					data-ng-if="$index>0">
 					<div data-ng-repeat="ifsElemnt in [n.children[0].children[1]]"
 						class="w3-border" data-ng-if="ifsElemnt.allIfs">
-						{{n.doc_id}} - {{n.value}}</div>
-
+						{{n.value}}
+						<ul>
+							<li data-ng-repeat="fr in n.children[0].children[0].children"><label>
+									<input type="checkbox" data-ng-model="fr.isChecked" />
+									{{fr.value}}
+							</label></li>
+						</ul>
+						<button class="w3-border" data-ng-click="savePlanAction(n)">
+							OK, запис</button>
+					</div>
 				</div>
 			</td>
 			<td>{{process_85236.value}}
@@ -40,7 +49,7 @@
 							<td class="w3-border"><div class="w3-hover-shadow"
 									data-ng-repeat="o in n.children[0].children[0].children">
 									{{1+$index}}. {{o.value}}</div></td>
-							<td class="w3-border">a2
+							<td class="w3-border">
 								<div data-ng-repeat="o in n.children[0].children[1].children"
 									class="w3-hover-shadow" data-ng-if="'if'==o.value">
 									{{o.value111}}<span data-ng-repeat="o1 in o.children"
