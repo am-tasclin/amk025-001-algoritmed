@@ -122,7 +122,7 @@ function readRef($scope){
 //						console.log(k)
 						if(response.data.list[0]){
 							var jsonDoc = JSON.parse(response.data.list[0].docbody)
-							console.log(jsonDoc)
+							console.log(jsonDoc.docRoot.doc_id, jsonDoc)
 							json_elementsMap(jsonDoc.docRoot, $scope.elementsMap, $scope.referencesMap)
 						}
 					}
@@ -240,6 +240,101 @@ sql_1c.doc_read_elements = function(){
 	"WHERE doc_id IN "
 }
 
+readAmk = function($scope){
+	console.log(new Date(1548013371088))
+	console.log($scope.elementsMap)
+	readSql({
+		sql:sql_amk025.amk025_template(),
+		jsonId:85085,
+		afterRead:function(response){
+			$scope.amk025_template = JSON.parse(response.data.list[0].docbody)
+			console.log('amk_template '+$scope.amk025_template.docRoot.doc_id
+					, $scope.amk025_template)
+					json_elementsMap($scope.amk025_template.docRoot, $scope.elementsMap, $scope.referencesMap)
+					readRef($scope)
+					if($scope.request.parameters.amk)
+						exe_fn.jsonTree.readTree($scope.request.parameters.amk)
+//			console.log($scope.elementsMap)
+						console.log($scope.elementsMap[85116])
+		}
+	})
+}
+
+
+function Daybook($scope, $http){
+	this.getDataElement = function(fnAfterSave){ 
+		var o = {
+				sql:"INSERT INTO doc (doctype, doc_id, parent, reference) " +
+				" VALUES (18, :nextDbId1, :parent, :reference);\n " +
+				"INSERT INTO docbody (docbody_id, docbody) VALUES (:nextDbId1, :docbody);\n ",
+				dataAfterSave:function(response){
+					console.log(response)
+				},
+		}
+		if(fnAfterSave)
+			o.dataAfterSave = fnAfterSave
+
+		return o
+	}
+
+	$scope.addDaybook = function(fnAfterSave){
+		console.log($scope.elementsMap[$scope.request.parameters.amk])
+		var l1 = 85116 || $scope.request.parameters.l1
+		var daybookDatatypeElement = $scope.elementsMap[$scope.elementsMap[l1].reference]
+		console.log(daybookDatatypeElement)
+		var amkPartEl = $scope.elementsMap[$scope.referenceElementPaars[l1]]
+		//console.log(exe_fn)
+		//console.log(exe_fn.daybook)
+		var dataElement = exe_fn.daybook.getDataElement(fnAfterSave)
+		dataElement.reference = daybookDatatypeElement.doc_id
+		dataElement.sql += "INSERT INTO doc (doctype, doc_id, parent, reference) " +
+		" VALUES (18, :nextDbId2, :nextDbId1, :reference2);\n " +
+		"INSERT INTO timestamp (timestamp_id, value) VALUES (:nextDbId2, :ts_value);\n " +
+		"INSERT INTO sort (sort_id, sort) VALUES (:nextDbId1, :sort); "
+		console.log(dataElement.sql)
+		var ts = new Date()
+		dataElement.ts_value = ts.toISOString().substring(0,23).replace('T',' ')
+//		dataElement.ts_value = ts.toISOString().replace('T',' ')
+		dataElement.sort = ts.getTime()
+		dataElement.docbody = ''
+		dataElement.reference2 = daybookDatatypeElement.children[0].doc_id
+		if(amkPartEl)
+			dataElement.parent = amkPartEl.doc_id
+		saveDataDocbody2(amkPartEl, dataElement)
+	}
+
+}
+
+var saveDataDocbody2 = function(amkPartEl, dataElement){
+	if(!amkPartEl){//INSERT part element
+		console.log('------INSERT part element----------')
+		insertWithPartElement(dataElement)
+	}else{
+		console.log('------update element----------')
+		console.log(amkPartEl)
+		console.log(dataElement)
+		writeSql(dataElement)
+	}
+	
+}
+
+var insertWithPartElement = function(dataElement){
+	var dataParentElement = {
+			parent:$scope.request.parameters.amk,
+			reference:$scope.request.parameters.l1,
+			sql:"INSERT INTO doc (doctype, doc_id, parent, reference) VALUES (18, :nextDbId1, :parent, :reference);",
+			dataAfterSave:function(response){
+				console.log(response)
+				console.log(response.data)
+				console.log(response.data.nextDbId1)
+				dataElement.parent = response.data.nextDbId1
+				writeSql(dataElement)
+			},
+	}
+	console.log(dataParentElement)
+	writeSql(dataParentElement)
+}
+
 function JsonTree($scope, $http){
 	var readTreeLevel = function(level, elementId){
 //		console.log(level)
@@ -280,7 +375,7 @@ function JsonTree($scope, $http){
 			sql:sql_1c.doc_read_elements()+" (" +elementId +")",
 			afterRead:function(response){
 				var el = response.data.list[0]
-//				console.log(el)
+				console.log('exe_fn.jsonTree.readTree '+el.doc_id, el)
 				if(el){
 					mapElement(el)
 					readTreeLevel(0, elementId)

@@ -30,7 +30,8 @@
 				data-ng-repeat="row in elementsMap[referenceElementPaars[85116]].children">
 				<td>{{fn.getTimestamp(row.sort) | date:'short'}}</td>
 				<td></td>
-				<td class="w3-border w3-border-black"><a href="#">
+				<td class="w3-border w3-border-black"><a href="#"
+					data-ng-click="elementNoteDialog.open(elementsMap[row.doc_id])">
 						{{row.docbody}} {{!row.docbody?'нотатки':''}} </a></td>
 				<td class="w3-border w3-border-black"></td>
 			</tr>

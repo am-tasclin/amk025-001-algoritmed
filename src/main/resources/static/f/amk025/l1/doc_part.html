@@ -36,16 +36,15 @@
 					class="w3-button w3-display-topright">&times;</span>
 				<div class="w3-row-padding w3-border-bottom">
 					<div class="w3-col m6 l6 s6 ">
-						<button class="w3-border"
-							data-ng-click="elementNoteDialog.save()">OK запис</button>
-						<button class="w3-border"
-							ng-click="elementNoteDialog.close()">Cancel
+						<button class="w3-border" data-ng-click="elementNoteDialog.save()">OK,
+							запис</button>
+						<button class="w3-border" ng-click="elementNoteDialog.close()">Cancel,
 							вихід</button>
+						<span data-ng-include="'/f/amk025/l1/dialog_button_'+request.parameters.l1+'.html'"></span>
 					</div>
-					<div class="w3-col m6 l6 s6 ">
-					</div>
+					<div class="w3-col m6 l6 s6 "></div>
 				</div>
-					нотатки
+				нотатки
 				<textarea ng-model="elementNoteDialog.note" style="width: 100%"></textarea>
 			</div>
 		</div>

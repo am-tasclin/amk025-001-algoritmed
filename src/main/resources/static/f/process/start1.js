@@ -2,6 +2,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	initApp($scope, $http)
 	console.log($scope.request.parameters)
 	exe_fn.jsonTree = new JsonTree($scope, $http)
+	exe_fn.daybook = new Daybook($scope, $http)
 
 	var calcIf = function(o){
 		var ifIs = true
@@ -14,11 +15,21 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		o.ifIs = ifIs
 	}
 
-	$scope.savePlanAction = function(o){
+	readAmk($scope)
+
+	
+	$scope.savePlanAction = function(o, list, path){
 		console.log(o)
+		console.log(list)
+		console.log(path)
+		return
+		$scope.addDaybook(function(response){
+			console.log('--------------21--')
+			console.log(response)
+		})
 	}
 
-	var lcalcAllIfs = $interval( function(){ calcAllIfs(); }, 2000)
+	var l_calcAllIfs = $interval( function(){ calcAllIfs(); }, 1000)
 	var calcAllIfs = function(){
 		console.log('---calc all Ifs-3------')
 		angular.forEach($scope.process_85236.children, function(v){
@@ -35,7 +46,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 				ifsElemnt.allIfs = allIfs
 			}
 		})
-		$interval.cancel(lcalcAllIfs)
+		$interval.cancel(l_calcAllIfs)
 	}
 
 	if($scope.request.parameters.amk){
