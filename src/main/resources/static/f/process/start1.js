@@ -17,15 +17,25 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 
 	readAmk($scope)
 
-	
 	$scope.savePlanAction = function(o, list, path){
 		console.log(o)
 		console.log(list)
 		console.log(path)
-		return
 		$scope.addDaybook(function(response){
-			console.log('--------------21--')
-			console.log(response)
+			console.log('-27--',response)
+			console.log(response.data.nextDbId1)
+			var data = {
+				idn:1,
+				sql:'',
+				parent:response.data.nextDbId1
+			}
+			angular.forEach(path, function(v){
+				data.sql += "INSERT INTO doc (doctype, doc_id, parent, reference) " +
+				" VALUES (18, :nextDbId"+data.idn+", :parent, "+v+");"
+				data.idn++
+			})
+			console.log(data)
+			writeSql(data)
 		})
 	}
 

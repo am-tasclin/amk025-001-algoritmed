@@ -28,11 +28,18 @@
 		<tbody>
 			<tr
 				data-ng-repeat="row in elementsMap[referenceElementPaars[85116]].children">
-				<td>{{fn.getTimestamp(row.sort) | date:'short'}}</td>
-				<td></td>
-				<td class="w3-border w3-border-black"><a href="#"
+				<td class="w3-hover-shadow"><a href="#"
 					data-ng-click="elementNoteDialog.open(elementsMap[row.doc_id])">
-						{{row.docbody}} {{!row.docbody?'нотатки':''}} </a></td>
+						{{fn.getTimestamp(row.sort) | date:'short'}} </a></td>
+				<td></td>
+				<td class="w3-border w3-border-black w3-hover-shadow"
+					data-ng-click="elementNoteDialog.open(elementsMap[row.doc_id])">
+					<div data-ng-repeat=" c in row.children"
+						data-ng-if="85183!=c.reference"
+						title="{{c.doc_id}}--{{c.reference}}">{{c.string_reference}}</div>
+					{{row.docbody}} {{!row.docbody && row.children.length==1 ?
+					'нотатки':''}}
+				</td>
 				<td class="w3-border w3-border-black"></td>
 			</tr>
 			<tr data-ng-repeat="row in [1]" data-ng-init="rowIndex = $index">

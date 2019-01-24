@@ -230,14 +230,15 @@ sql_1c.doc_read_elements_0 = function(){
 }
 
 sql_1c.doc_read_elements = function(){
-	return "SELECT * FROM doc " +
+	return "SELECT * FROM doc d1" +
 	"\n LEFT JOIN (SELECT value string, string_id FROM string) string ON string_id=doc_id " +
 	"\n LEFT JOIN (SELECT value date, date_id FROM date) date ON date_id=doc_id " +
 	"\n LEFT JOIN (SELECT value ts, timestamp_id FROM timestamp) timestamp ON timestamp_id=doc_id " +
 	"\n LEFT JOIN (SELECT value vinteger, integer_id FROM integer) integer ON integer_id=doc_id " +
 	"\n LEFT JOIN docbody ON docbody_id=doc_id " +
-	"LEFT JOIN sort ON sort_id=doc_id " +
-	"WHERE doc_id IN "
+	"\n LEFT JOIN (SELECT doc_id, s.value string_reference FROM doc LEFT JOIN string s ON string_id=doc_id ) d2 ON d2.doc_id=d1.reference " +
+	"LEFT JOIN sort ON sort_id=d1.doc_id " +
+	"WHERE d1.doc_id IN "
 }
 
 readAmk = function($scope){
