@@ -16,12 +16,16 @@
 						class="w3-border" data-ng-if="ifsElemnt.allIfs">
 						{{n.value}}
 						<ul>
-							<li data-ng-repeat="fr in n.children[0].children[0].children"><label>
-									<input type="checkbox" data-ng-model="fr.isChecked" />
+							<li data-ng-repeat="fr in n.children[0].children[0].children"><label
+								data-ng-class="{'w3-green':referenceElementPaars[fr.doc_id]}">
+									<input type="checkbox" data-ng-model="fr.isChecked"
+									data-ng-click="setCheckPlanTask(fr)"
+									data-ng-checked="referenceElementPaars[fr.doc_id]" />
 									{{fr.value}}
 							</label></li>
 						</ul>
-						<button class="w3-border" data-ng-click="savePlanAction(n, n.children[0].children[0].children, [85236])">
+						<button class="w3-border"
+							data-ng-click="savePlanAction(n, n.children[0].children[0].children, [85236])">
 							OK, запис</button>
 					</div>
 				</div>
@@ -47,6 +51,7 @@
 							data-ng-if="$index>0">
 							<td class="w3-border">{{n.value}}</td>
 							<td class="w3-border"><div class="w3-hover-shadow"
+							data-ng-class="{'w3-green':referenceElementPaars[o.doc_id]}"
 									data-ng-repeat="o in n.children[0].children[0].children">
 									{{1+$index}}. {{o.value}}</div></td>
 							<td class="w3-border">

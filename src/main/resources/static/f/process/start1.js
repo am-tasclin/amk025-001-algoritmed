@@ -17,26 +17,72 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 
 	readAmk($scope)
 
+	$scope.setCheckPlanTask = function(o){
+		console.log(o)
+		console.log($scope.referenceElementPaars[o.doc_id])
+		if($scope.referenceElementPaars[o.doc_id]){
+			o.isDeletedChecked = !o.isDeletedChecked
+		}
+	}
 	$scope.savePlanAction = function(o, list, path){
 		console.log(o)
 		console.log(list)
 		console.log(path)
-		$scope.addDaybook(function(response){
-			console.log('-27--',response)
-			console.log(response.data.nextDbId1)
-			var data = {
-				idn:1,
-				sql:'',
-				parent:response.data.nextDbId1
+		var lastPathId = path.reverse()[0]
+		var data = { idn:0, sql:'',}
+		if($scope.referenceElementPaars[lastPathId]){
+			parentId = $scope.referenceElementPaars[o.doc_id]
+			console.log(parentId)
+			if(parentId){
+				data.parent = parentId
+				console.log(data)
+				angular.forEach(list, function(v){
+					var savedDataId = $scope.referenceElementPaars[v.doc_id]
+					if(savedDataId){
+//						if(!v.isChecked){//DELETE
+						if(v.isDeletedChecked){//DELETE
+							data.sql += "DELETE FROM doc WHERE doc_id = "+savedDataId+";\n "
+						}
+					}else{
+						if(v.isChecked){//INSERT
+							data.idn++
+							data.sql += "INSERT INTO doc (doctype, doc_id, parent, reference) " +
+							" VALUES (18, :nextDbId"+ data.idn +", "+ data.parent +", "+ v.doc_id +");\n "
+						}
+					}
+				})
+				console.log(data.sql)
+				writeSql(data)
 			}
-			angular.forEach(path, function(v){
-				data.sql += "INSERT INTO doc (doctype, doc_id, parent, reference) " +
-				" VALUES (18, :nextDbId"+data.idn+", :parent, "+v+");"
-				data.idn++
+		}else{
+			$scope.addDaybook(function(response){
+				console.log('-27--',response)
+				console.log(response.data.nextDbId1)
+				data.parent = response.data.nextDbId1
+				angular.forEach(path, function(v){
+					data.idn++
+					data.sql += "INSERT INTO doc (doctype, doc_id, parent, reference) " +
+					" VALUES (18, :nextDbId"+ data.idn +", :parent, "+v+");\n "
+				})
+				if(data.idn > 0){
+					var parent = data.idn
+					data.idn++
+					data.sql += "INSERT INTO doc (doctype, doc_id, parent, reference) " +
+					" VALUES (18, :nextDbId"+ data.idn +", :nextDbId"+ parent +", "+ o.doc_id +");\n "
+					parent = data.idn
+					angular.forEach(list, function(v){
+						if(v.isChecked){
+							data.idn++
+							data.sql += "INSERT INTO doc (doctype, doc_id, parent, reference) " +
+							" VALUES (18, :nextDbId"+ data.idn +", :nextDbId"+ parent +", "+ v.doc_id +");\n "
+							console.log(v.sort)
+						}
+					})
+					console.log(data.sql)
+//					writeSql(data)
+				}
 			})
-			console.log(data)
-			writeSql(data)
-		})
+		}
 	}
 
 	var l_calcAllIfs = $interval( function(){ calcAllIfs(); }, 1000)
