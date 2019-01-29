@@ -1,9 +1,6 @@
-.am-b {
-	font-weight: bold;
-}
-.am-n {
-	font-weight: normal;
-}
+.am-b {font-weight: bold;}
+.am-i {font-style: italic; }
+.am-n {font-weight: normal;}
 
 table.am-amk025-table tr td{
 	vertical-align: top;

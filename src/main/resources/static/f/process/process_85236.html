@@ -17,11 +17,12 @@
 						{{n.value}}
 						<ul>
 							<li data-ng-repeat="fr in n.children[0].children[0].children"><label
-								data-ng-class="{'w3-green':referenceElementPaars[fr.doc_id]}">
+								data-ng-class="{'w3-green':referenceElementPaars[fr.doc_id] || referenceElementPaars[fr.reference]}">
 									<input type="checkbox" data-ng-model="fr.isChecked"
 									data-ng-click="setCheckPlanTask(fr)"
-									data-ng-checked="referenceElementPaars[fr.doc_id]" />
-									{{fr.value}}
+									data-ng-checked="referenceElementPaars[fr.doc_id] || referenceElementPaars[fr.reference]" />
+									{{fr.value}} <span class="am-i"> {{fr.string_reference}}
+								</span>
 							</label></li>
 						</ul>
 						<button class="w3-border"
@@ -42,18 +43,22 @@
 							<th class="w3-border" rowspan="2">{{h.children[2].value}}</th>
 						</tr>
 						<tr>
-							<th class="w3-border">{{h.children[0].children[0].value}}</th>
+							<th class="w3-border"
+							title="{{h.children[0].children[0].doc_id}}"
+							>{{h.children[0].children[0].value}}</th>
 							<th class="w3-border">{{h.children[0].children[1].value}}</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr data-ng-repeat="n in process_85236.children"
-							data-ng-if="$index>0">
+							data-ng-if="$index>1">
 							<td class="w3-border">{{n.value}}</td>
 							<td class="w3-border"><div class="w3-hover-shadow"
-							data-ng-class="{'w3-green':referenceElementPaars[o.doc_id]}"
+									data-ng-class="{'w3-green':referenceElementPaars[o.doc_id] || referenceElementPaars[o.reference]}"
 									data-ng-repeat="o in n.children[0].children[0].children">
-									{{1+$index}}. {{o.value}}</div></td>
+									{{1+$index}}. {{o.value}} <span class="am-i">
+										{{o.string_reference}} </span>
+								</div></td>
 							<td class="w3-border">
 								<div data-ng-repeat="o in n.children[0].children[1].children"
 									class="w3-hover-shadow" data-ng-if="'if'==o.value">

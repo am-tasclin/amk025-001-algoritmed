@@ -12,8 +12,7 @@
 							class="w3-text w3-tag">{{col.value}}: <br /> <span
 							data-ng-repeat="place in col.children">
 								{{1+$index}}-{{place.value}}, </span></span> 1234
-						<!-- 
-								 <span
+						<!-- <span
 							data-ng-repeat="place in col.children" title="{{place.value}}">
 							{{1+$index}}-{{place.value.substring(0,2)}}, </span>
 								 -->
@@ -36,12 +35,12 @@
 					data-ng-click="elementNoteDialog.open(elementsMap[row.doc_id])">
 					<div data-ng-repeat=" c in row.children"
 						data-ng-if="85183!=c.reference"
-						title="{{c.doc_id}}--{{c.reference}}">
+						title="id-{{c.doc_id}}, ref-{{c.reference}}  {{c.reference2}}">
 						{{c.string_reference}}
 						<div data-ng-repeat=" c1 in c.children"
-							title="{{c1.doc_id}}--{{c1.reference}}">
+							title="id-{{c1.doc_id}}, ref-{{c1.reference}} {{c1.reference2}}">
 							{{c1.string_reference}} <span data-ng-repeat=" c2 in c1.children"
-								title="{{c2.doc_id}}--{{c2.reference}}">{{$first?':':''}}
+								title="id-{{c2.doc_id}}, ref-{{c2.reference}} {{c2.reference2}}">{{$first?':':''}}
 								{{c2.string_reference}}{{$last?'.':','}} </span>
 						</div>
 					</div> {{row.docbody}} {{!row.docbody && row.children.length==1 ?

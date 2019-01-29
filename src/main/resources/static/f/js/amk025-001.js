@@ -365,7 +365,7 @@ function JsonTree($scope, $http){
 		if(element.reference2){
 //			console.log($scope.referenceElementPaars)
 //			console.log("------read reference2 -------------")
-			console.log(element.reference2)
+			console.log(element.reference2, element)
 			exe_fn.jsonTree.readTree(element.reference2)
 		}
 	}

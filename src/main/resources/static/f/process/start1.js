@@ -30,7 +30,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		console.log(path)
 		var lastPathId = path.reverse()[0]
 		var data = { idn:0, sql:'',}
-		if($scope.referenceElementPaars[lastPathId]){
+		if($scope.referenceElementPaars[lastPathId]){// план обробляється вдруге
 			parentId = $scope.referenceElementPaars[o.doc_id]
 			console.log(parentId)
 			if(parentId){
@@ -54,15 +54,20 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 				console.log(data.sql)
 				writeSql(data)
 			}
-		}else{
-			$scope.addDaybook(function(response){
+		}else{// план обробляється вперше
+			$scope.addDaybook(function(response){// перший запис в щоденник 
 				console.log('-27--',response)
 				console.log(response.data.nextDbId1)
 				data.parent = response.data.nextDbId1
-				angular.forEach(path, function(v){
+				angular.forEach(path, function(v,k){
 					data.idn++
-					data.sql += "INSERT INTO doc (doctype, doc_id, parent, reference) " +
-					" VALUES (18, :nextDbId"+ data.idn +", :parent, "+v+");\n "
+					if(k>0){
+						data.sql += "INSERT INTO doc (doctype, doc_id, parent, reference) " +
+						" VALUES (18, :nextDbId"+ data.idn +", :nextDbId"+(data.idn-1)+", "+v+");\n "
+					}else{
+						data.sql += "INSERT INTO doc (doctype, doc_id, parent, reference) " +
+						" VALUES (18, :nextDbId"+ data.idn +", :parent, "+v+");\n "
+					}
 				})
 				if(data.idn > 0){
 					var parent = data.idn
@@ -73,13 +78,18 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 					angular.forEach(list, function(v){
 						if(v.isChecked){
 							data.idn++
-							data.sql += "INSERT INTO doc (doctype, doc_id, parent, reference) " +
-							" VALUES (18, :nextDbId"+ data.idn +", :nextDbId"+ parent +", "+ v.doc_id +");\n "
+							if(v.reference){
+								data.sql += "INSERT INTO doc (doctype, doc_id, parent, reference, reference2) " +
+								" VALUES (18, :nextDbId"+ data.idn +", "+ data.parent +", "+ v.reference +", "+ v.reference +");\n "
+							}else{
+								data.sql += "INSERT INTO doc (doctype, doc_id, parent, reference) " +
+								" VALUES (18, :nextDbId"+ data.idn +", :nextDbId"+ parent +", "+ v.doc_id +");\n "
+							}
 							console.log(v.sort)
 						}
 					})
 					console.log(data.sql)
-//					writeSql(data)
+					writeSql(data)
 				}
 			})
 		}
@@ -89,9 +99,9 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	var calcAllIfs = function(){
 		console.log('---calc all Ifs-3------')
 		angular.forEach($scope.process_85236.children, function(v){
-			if(v.children){
-				var allIfs = false
+			if(v.children && v.children[0].children){
 				var ifsElemnt = v.children[0].children[1]
+				var allIfs = false
 				angular.forEach(ifsElemnt.children, function(v2){
 					calcIf(v2)
 					if(v2.ifIs !== undefined){

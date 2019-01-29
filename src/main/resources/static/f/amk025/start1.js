@@ -12,8 +12,10 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		console.log(this)
 		var data = {
 			doc_id:this.o.doc_id,
-			sql:"DELETE FROM doc WHERE doc_id IN (" +
-			"SELECT doc_id FROM doc where parent in (SELECT doc_id FROM doc where parent = :doc_id));\n " +
+			sql:"DELETE FROM doc WHERE doc_id IN (SELECT d3.doc_id FROM doc d1, doc d2, doc d3 " +
+			" WHERE d3.parent = d2.doc_id AND d2.parent = d1.doc_id AND d1.parent = :doc_id);\n " +
+			"DELETE FROM doc WHERE doc_id IN (SELECT d2.doc_id FROM doc d1, doc d2 " +
+			" WHERE d2.parent = d1.doc_id AND d1.parent = :doc_id);\n " +
 			"DELETE FROM docbody WHERE docbody_id = :doc_id;\n " +
 			"DELETE FROM doc WHERE :doc_id IN (parent, doc_id);"
 		}
