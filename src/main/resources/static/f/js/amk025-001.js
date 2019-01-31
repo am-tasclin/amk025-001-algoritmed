@@ -122,7 +122,7 @@ function readRef($scope){
 //						console.log(k)
 						if(response.data.list[0]){
 							var jsonDoc = JSON.parse(response.data.list[0].docbody)
-							console.log(jsonDoc.docRoot.doc_id, jsonDoc)
+//							console.log(k, jsonDoc)
 							json_elementsMap(jsonDoc.docRoot, $scope.elementsMap, $scope.referencesMap)
 						}
 					}
@@ -253,10 +253,11 @@ readAmk = function($scope){
 					, $scope.amk025_template)
 					json_elementsMap($scope.amk025_template.docRoot, $scope.elementsMap, $scope.referencesMap)
 					readRef($scope)
-					if($scope.request.parameters.amk)
+					if($scope.request.parameters.amk){
+console.log('--------------',$scope.request.parameters.amk)
 						exe_fn.jsonTree.readTree($scope.request.parameters.amk)
+					}
 //			console.log($scope.elementsMap)
-						console.log($scope.elementsMap[85116])
 		}
 	})
 }
@@ -337,8 +338,9 @@ var insertWithPartElement = function(dataElement){
 }
 
 function JsonTree($scope, $http){
-	var readTreeLevel = function(level, elementId){
+	this.readTreeLevel = function(level, elementId){
 //		console.log(level)
+		var thisO = this
 		readSql({
 			sql:sql_1c['doc_read_elements_'+level](),
 			docId:elementId,
@@ -348,38 +350,81 @@ function JsonTree($scope, $http){
 					var p = $scope.elementsMap[el.parent]
 					if(!p.children) p.children = []
 					p.children.push(el)
-					mapElement(el)
+					thisO.mapElement(el)
 				})
 				if(list[0]){
-					readTreeLevel(++level, elementId)
+					thisO.readTreeLevel(++level, elementId)
 				}
 			}
 		})
 	}
 
-	var mapElement = function(element){
+	this.readDocBody = function(docId){
+		var thisO = this
+		readSql({
+			sql:sql_amk025.amk025_template(),
+			jsonId:docId,
+			afterRead:function(response){
+				var el = response.data.list[0]
+				if(el){
+					if(el.docbody){
+						if(el.docbody.includes('SELECT')){
+						}else{
+							try{
+								var docbodyDocument = JSON.parse(el.docbody).docRoot
+								console.log(docbodyDocument)
+								thisO.mapTree(docbodyDocument)
+							}catch(e){
+								if (e instanceof SyntaxError) {
+									console.error(e)
+//								console.log(el)
+								} else {
+									console.log(e)
+								}
+							}
+						}
+					}
+				}
+			}
+		})
+
+	}
+
+	this.mapElement = function(element){
 		$scope.elementsMap[element.doc_id] = element
 		if(element.reference){
 			$scope.referenceElementPaars[element.reference] = element.doc_id
+			this.readDocBody(element.reference)
 		}
 		if(element.reference2){
-//			console.log($scope.referenceElementPaars)
-//			console.log("------read reference2 -------------")
-			console.log(element.reference2, element)
+//				console.log($scope.referenceElementPaars)
+//				console.log("------read reference2 -------------")
+//				console.log(element.reference2, element)
 			exe_fn.jsonTree.readTree(element.reference2)
 		}
 	}
 
+	this.mapTree = function(el){
+		$scope.elementsMap[el.doc_id] = el
+		var thisO = this
+		angular.forEach(el.children, function(v){
+			thisO.mapTree(v)
+		})
+	}
+
+
 	this.readTree = function(elementId, docName){
 //		console.log(sql_1c.doc_read_elements()+" (" +elementId +")")
+		var thisO = this
 		readSql({
 			sql:sql_1c.doc_read_elements()+" (" +elementId +")",
 			afterRead:function(response){
 				var el = response.data.list[0]
-				console.log('exe_fn.jsonTree.readTree '+el.doc_id, el)
+//				console.log(elementId, el)
+//				console.log('exe_fn.jsonTree.readTree '+el.doc_id, el)
 				if(el){
-					mapElement(el)
-					readTreeLevel(0, elementId)
+					thisO.mapElement(el)
+					thisO.readTreeLevel(0, elementId)
 					if(docName){
 						$scope[docName] = el
 					}
@@ -388,8 +433,8 @@ function JsonTree($scope, $http){
 		})
 //		console.log(sql_1c.doc_read_elements_0())
 	}
-
 }
+
 
 function Exe_fn($scope, $http){
 	this.httpGet=function(progr_am){

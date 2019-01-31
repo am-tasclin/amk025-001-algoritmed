@@ -21,8 +21,9 @@
 									<input type="checkbox" data-ng-model="fr.isChecked"
 									data-ng-click="setCheckPlanTask(fr)"
 									data-ng-checked="referenceElementPaars[fr.doc_id] || referenceElementPaars[fr.reference]" />
-									{{fr.value}} <span class="am-i"> {{fr.string_reference}}
-								</span>
+									{{fr.value}} 
+								<span data-ng-repeat="o in [fr]"
+										data-ng-include="'/f/process/dd_value.html'"></span>
 							</label></li>
 						</ul>
 						<button class="w3-border"
@@ -56,14 +57,15 @@
 							<td class="w3-border"><div class="w3-hover-shadow"
 									data-ng-class="{'w3-green':referenceElementPaars[o.doc_id] || referenceElementPaars[o.reference]}"
 									data-ng-repeat="o in n.children[0].children[0].children">
-									{{1+$index}}. {{o.value}} <span class="am-i">
-										{{o.string_reference}} </span>
+									{{1+$index}}. {{o.value}} <span data-ng-repeat="o in [o]"
+										data-ng-include="'/f/process/dd_value.html'"></span>
 								</div></td>
 							<td class="w3-border">
 								<div data-ng-repeat="o in n.children[0].children[1].children"
 									class="w3-hover-shadow" data-ng-if="'if'==o.value">
 									{{o.value111}}<span data-ng-repeat="o1 in o.children"
 										class="w3-hover-shadow" data-ng-switch="o1.value"> <span
+										data-ng-switch-default>{{o1.value}}</span> <span
 										data-ng-switch-when="AND">,</span> <span
 										data-ng-switch-when="OR">|</span> <span
 										data-ng-switch-when="age"

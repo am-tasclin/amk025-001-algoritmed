@@ -48,12 +48,15 @@
 				<div data-ng-repeat=" c in elementNoteDialog.o.children"
 					data-ng-if="85183!=c.reference"
 					title="{{c.doc_id}}--{{c.reference}}">
-					{{c.string_reference}}
+					<span data-ng-repeat="o in [c]"
+						data-ng-include="'/f/process/dd_value.html'"></span>
 					<div data-ng-repeat=" c1 in c.children"
 						title="{{c1.doc_id}}--{{c1.reference}}">
-						{{c1.string_reference}}</div>
+						<span data-ng-repeat="o in [c1]"
+							data-ng-include="'/f/process/dd_value.html'"></span>
+					</div>
 				</div>
-				нотатки
+				<span class="w3-tiny am-b"> нотатки </span>
 				<textarea ng-model="elementNoteDialog.note" style="width: 100%"></textarea>
 			</div>
 		</div>

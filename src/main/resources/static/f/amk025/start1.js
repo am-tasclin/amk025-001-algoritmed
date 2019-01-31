@@ -5,6 +5,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	exe_fn.daybook = new Daybook($scope, $http)
 	console.log(exe_fn.daybook)
 	
+	
 	$scope.elementNoteDialog = {
 		elementId:0, style:{display:'none'},
 	}
@@ -43,6 +44,8 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		}
 	}
 
+	
+	
 	$scope.saveDataDocbody = function(colO){
 		console.log($scope.elementsMap[$scope.request.parameters.amk])
 		var amkPartEl = $scope.elementsMap[$scope.referenceElementPaars[$scope.request.parameters.l1]]
@@ -128,7 +131,6 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		console.log($scope.elementsMap[85256])
 	}
 
-
 	readSql({
 		sql:sql_amk025.amk025_template(),
 		jsonId:5036,
@@ -139,6 +141,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		}
 	})
 
+	
 	readAmk($scope)
 
 })

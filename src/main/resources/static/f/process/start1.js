@@ -7,7 +7,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	var calcIf = function(o){
 		var ifIs = true
 		angular.forEach(o.children, function(v, k){
-			console.log(v.calcIf+'/'+v.value)
+//			console.log(v.calcIf+'/'+v.value)
 			if(v.calcIf !== undefined){
 				ifIs = ifIs && v.calcIf
 			}
@@ -24,6 +24,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 			o.isDeletedChecked = !o.isDeletedChecked
 		}
 	}
+
 	$scope.savePlanAction = function(o, list, path){
 		console.log(o)
 		console.log(list)
@@ -125,6 +126,8 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		afterRead:function(response){
 			$scope.process_85236 = JSON.parse(response.data.list[0].docbody).docRoot
 			console.log($scope.process_85236)
+			exe_fn.jsonTree.mapTree($scope.process_85236)
+			console.log(85546, $scope.elementsMap[85546])
 		}
 	})
 
