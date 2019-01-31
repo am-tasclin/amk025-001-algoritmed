@@ -8,9 +8,9 @@
 	href="/webjars/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="shortcut icon" href="/f/img/algoritmed.ico"
 	type="image/x-icon">
-<script src="/webjars/angularjs/1.7.5/angular.min.js"></script>
-<script src="/webjars/angularjs/1.7.5/angular-sanitize.min.js"></script>
-<script src="/webjars/angularjs/1.7.5/i18n/angular-locale_uk.js"></script>
+<script src="/webjars/angularjs/1.7.6/angular.min.js"></script>
+<script src="/webjars/angularjs/1.7.6/angular-sanitize.min.js"></script>
+<script src="/webjars/angularjs/1.7.6/i18n/angular-locale_uk.js"></script>
 <script src="/f/js/amk025-001.js"></script>
 <script src="/f/process/start1.js"></script>
 <!-- 
@@ -24,5 +24,34 @@
 	</h1>
 	<div data-ng-include="'/f/mdoc-process-links.html'"></div>
 	<div data-ng-include="'/f/process/process_85236.html'"></div>
+
+
+	<div data-ng-style="elementDialog.style" class="w3-modal">
+		<div class="w3-modal-content">
+			<div class="w3-container">
+				<span data-ng-click="elementDialog.close()"
+					class="w3-button w3-display-topright">&times;</span>
+				<div class="w3-row-padding w3-border-bottom">
+					<div class="w3-col m6 l6 s6 ">
+
+						<button class="w3-border" ng-click="elementDialog.close()">Cancel,
+							вихід</button>
+
+					</div>
+					<div class="w3-col m6 l6 s6 "></div>
+				</div>
+				<div
+					data-ng-repeat="d in [elementsMap[elementDialog.o.reference].docRoot]">
+					<div data-ng-include="'/f/process/process_85569.html'"></div>
+					a1
+					<div class="w3-tiny w3-code">{{elementDialog.o.reference}} a1
+						{{d.children[1]}}</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+
 </body>
 </html>

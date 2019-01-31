@@ -372,7 +372,15 @@ function JsonTree($scope, $http){
 						}else{
 							try{
 								var docbodyDocument = JSON.parse(el.docbody).docRoot
-								console.log(docbodyDocument)
+								var docRootDoc = $scope.elementsMap[docId]
+								if(!docRootDoc){
+									docRootDoc = {doc_id:docId}
+								}
+								if(!docRootDoc.docRoot){
+									docRootDoc.docRoot = docbodyDocument
+								}
+								$scope.elementsMap[docId] = docRootDoc
+								console.log('readDocBody ',docId, docbodyDocument)
 								thisO.mapTree(docbodyDocument)
 							}catch(e){
 								if (e instanceof SyntaxError) {
@@ -381,11 +389,7 @@ function JsonTree($scope, $http){
 								} else {
 									console.log(e)
 								}
-							}
-						}
-					}
-				}
-			}
+			}	}	}	}	}
 		})
 
 	}

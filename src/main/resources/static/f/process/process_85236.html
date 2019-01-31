@@ -15,6 +15,9 @@
 					<div data-ng-repeat="ifsElemnt in [n.children[0].children[1]]"
 						class="w3-border" data-ng-if="ifsElemnt.allIfs">
 						{{n.value}}
+						<span class="w3-tiny am-b">
+						{{elementsMap[85348].value}}
+						</span>
 						<ul>
 							<li data-ng-repeat="fr in n.children[0].children[0].children"><label
 								data-ng-class="{'w3-green':referenceElementPaars[fr.doc_id] || referenceElementPaars[fr.reference]}">
@@ -79,7 +82,14 @@
 							</td>
 							<td class="w3-border">
 								<div data-ng-repeat="o in n.children[1].children"
-									class="w3-hover-shadow">{{1+$index}}. {{o.value}}</div>
+									class="w3-hover-shadow">
+									{{1+$index}}. {{o.value}} <span data-ng-if="o.reference"
+										class="w3-hover-shadow"> <a href="#"
+										data-ng-click="openReferenceDocument(o)"> <i
+											class="fa fa-link" aria-hidden="true"></i>
+									</a>
+									</span>
+								</div>
 							</td>
 							<td class="w3-border">{{n.children[2].children[0].value}} <span
 								data-ng-if="'if'==n.children[2].children[0].children[0].value"
