@@ -1,21 +1,43 @@
 <div>
-	a1
-	<table>
+	<table class="am-amk025-table">
 		<tr class="w3-tiny">
-			<td colspan="3">F</td>
+			<td colspan="2" class="w3-center"><span
+				class="w3-yellow w3-border">
+					{{d.children[0].children[3].children[0].value}}</span></td>
 			<td></td>
-			<td colspan="2">M</td>
+			<td colspan="2" class="w3-center"><span
+				class="w3-yellow w3-border">
+					{{d.children[0].children[3].children[1].value}}</span></td>
 		</tr>
 		<tr class="w3-tiny">
-			<td>s</td>
-			<td>ns</td>
-			<td>ys</td>
+			<td class="w3-center "><span class="w3-yellow w3-border">
+					{{d.children[0].children[2].value}}
+					{{d.children[0].children[2].children[0].value}} </span></td>
+			<td class="w3-center "><span class="w3-yellow w3-border">
+					{{d.children[0].children[2].value}}
+					{{d.children[0].children[2].children[1].value}} </span></td>
 			<td>age</td>
-			<td>ns</td>
-			<td>ys</td>
+			<td class="w3-center "><span class="w3-yellow w3-border">
+					{{d.children[0].children[2].value}}
+					{{d.children[0].children[2].children[0].value}} </span></td>
+			<td class="w3-center "><span class="w3-yellow w3-border">
+					{{d.children[0].children[2].value}}
+					{{d.children[0].children[2].children[1].value}} </span></td>
 		</tr>
 		<tr data-ng-repeat="age in d.children[1].children">
-		<td>{{age.value}}</td>
+			<td data-ng-repeat="age in [age]" data-ng-init="smoker=0;gender=0;"
+				data-ng-include="'/f/process/process_85569_cholesterol_table.html'">
+			</td>
+			<td data-ng-repeat="age in [age]" data-ng-init="smoker=1;gender=0;"
+				data-ng-include="'/f/process/process_85569_cholesterol_table.html'">
+			</td>
+			<td>{{age.value}}</td>
+			<td data-ng-repeat="age in [age]" data-ng-init="smoker=0;gender=1;"
+				data-ng-include="'/f/process/process_85569_cholesterol_table.html'">
+			</td>
+			<td data-ng-repeat="age in [age]" data-ng-init="smoker=1;gender=1;"
+				data-ng-include="'/f/process/process_85569_cholesterol_table.html'">
+			</td>
 		</tr>
 	</table>
 </div>

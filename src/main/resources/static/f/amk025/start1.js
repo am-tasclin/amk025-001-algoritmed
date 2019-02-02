@@ -44,8 +44,6 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		}
 	}
 
-	
-	
 	$scope.saveDataDocbody = function(colO){
 		console.log($scope.elementsMap[$scope.request.parameters.amk])
 		var amkPartEl = $scope.elementsMap[$scope.referenceElementPaars[$scope.request.parameters.l1]]

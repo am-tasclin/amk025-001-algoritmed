@@ -1,0 +1,10 @@
+<table>
+	<tr data-ng-repeat="sysbp in age.children">
+		<td data-ng-if="smoker==0 && gender==0">{{sysbp.value}}</td>
+		<td class="w3-border {{process_85569.color(chrl)}}"
+			data-ng-repeat="chrl in sysbp.children[smoker].children[gender].children">
+			{{chrl.children[0].value}}
+			{{chrl.children[0].value>9?'':'&nbsp;'}}
+			</td>
+	</tr>
+</table>

@@ -17,6 +17,20 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 
 	readAmk($scope)
 
+	$scope.process_85569 ={}
+	$scope.process_85569.color = function(o){
+		var v = o.children[0].value*1
+		if(v>=15){
+			return 'w3-pink'
+		}else if(v>=10){
+			return 'w3-red'
+		}else if(v>=5){
+			return 'w3-deep-orange'
+		}else if(v>=3){
+			return 'w3-lime'
+		}
+	}
+	
 	$scope.setCheckPlanTask = function(o){
 		console.log(o)
 		console.log($scope.referenceElementPaars[o.doc_id])
