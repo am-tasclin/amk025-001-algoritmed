@@ -25,16 +25,19 @@
 					{{d.children[0].children[2].children[1].value}} </span></td>
 		</tr>
 		<tr data-ng-repeat="age in d.children[1].children"
-			data-ng-init="lastAge=$last;isMyAgeGroup=getAgeOfPatient() < d.children[1].children[$index-1].value && getAgeOfPatient()>=age.value"
+			data-ng-init="lastAge=$last;isMyAgeGroup = getAgeOfPatient() < d.children[1].children[$index-1].value && getAgeOfPatient()>=age.value"
 			data-ng-class="{'w3-border w3-border-green':isMyAgeGroup}"
 			class="w3-border-top">
 			<td data-ng-repeat="age in [age]" data-ng-init="gender=0;smoker=0;"
+			data-ng-class="{'w3-leftbar w3-border-green':getGenderOfPatient()=='Ч' && isMyAgeGroup}"
 				data-ng-include="'/f/process/process_85569_cholesterol_table.html'">
 			</td>
 			<td data-ng-repeat="age in [age]" data-ng-init="gender=0;smoker=1;"
+			data-ng-class="{'w3-rightbar w3-border-green':getGenderOfPatient()=='Ч' && isMyAgeGroup}"
 				data-ng-include="'/f/process/process_85569_cholesterol_table.html'">
 			</td>
-			<td>{{age.value}}</td>
+			<td data-ng-class="{'am-b w3-green':isMyAgeGroup}">
+				{{age.value}}</td>
 			<td data-ng-repeat="age in [age]" data-ng-init="gender=1;smoker=0;"
 				data-ng-include="'/f/process/process_85569_cholesterol_table.html'">
 			</td>

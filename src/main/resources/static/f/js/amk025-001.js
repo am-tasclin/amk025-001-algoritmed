@@ -38,6 +38,10 @@ var initApp = function($scope, $http){
 		o.calcIf = evl
 		return o.calcIf
 	}
+	$scope.getGenderOfPatient = function (){
+		var g = $scope.elementsMap[$scope.elementsMap[$scope.referenceElementPaars[85370]].reference2].string
+		return g
+	}
 	$scope.getAgeOfPatient = function (){
 		if($scope.referenceElementPaars[85247]){
 			var d1 = $scope.elementsMap[$scope.referenceElementPaars[85247]].date
