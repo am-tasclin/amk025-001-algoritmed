@@ -28,6 +28,12 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 			return 'w3-deep-orange'
 		}else if(v>=3){
 			return 'w3-lime'
+		}else if(v>=2){
+			return 'w3-yellow'
+		}else if(v>=1){
+			return 'w3-green'
+		}else{
+			return 'w3-light-green'
 		}
 	}
 	
