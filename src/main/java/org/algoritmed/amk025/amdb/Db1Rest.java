@@ -34,7 +34,8 @@ public class Db1Rest  extends DbCommon{
 		){
 		logger.info("\n\n--35----- "
 				+ "/r/url_sql_read_db1"
-				+ "\n" + data
+				+ "\n SQL = \n"+data.get("sql")
+//				+ "\n" + data
 				);
 		String sql = (String) data.get("sql");
 		executeSqlBlock.updateNewIds(sql, data, env);

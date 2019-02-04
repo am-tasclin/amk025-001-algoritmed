@@ -73,7 +73,6 @@ public class ExecuteSqlBlock {
 //							String docbody = objectToString(data.get("docbodyMap"));
 //							data.put("docbody", docbody);
 							data.put("docbodyMap", data.get("docbodyMap"));
-
 						}
 					}
 					int update = dbParamJdbcTemplate.update(sql_command, data);

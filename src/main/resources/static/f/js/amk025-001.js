@@ -253,14 +253,13 @@ readAmk = function($scope){
 		jsonId:85085,
 		afterRead:function(response){
 			$scope.amk025_template = JSON.parse(response.data.list[0].docbody)
-			console.log('amk_template '+$scope.amk025_template.docRoot.doc_id
-					, $scope.amk025_template)
-					json_elementsMap($scope.amk025_template.docRoot, $scope.elementsMap, $scope.referencesMap)
-					readRef($scope)
-					if($scope.request.parameters.amk){
-console.log('--------------',$scope.request.parameters.amk)
-						exe_fn.jsonTree.readTree($scope.request.parameters.amk)
-					}
+			console.log('amk_template '+$scope.amk025_template.docRoot.doc_id , $scope.amk025_template)
+			json_elementsMap($scope.amk025_template.docRoot, $scope.elementsMap, $scope.referencesMap)
+			readRef($scope)
+			if($scope.request.parameters.amk){
+				console.log('-------amk-------',$scope.request.parameters.amk, $scope)
+				exe_fn.jsonTree.readTree($scope.request.parameters.amk, 'doc_'+$scope.request.parameters.amk)
+			}
 //			console.log($scope.elementsMap)
 		}
 	})
@@ -342,6 +341,23 @@ var insertWithPartElement = function(dataElement){
 }
 
 function JsonTree($scope, $http){
+	this.readLinks = function(docId, docRootElement){
+		readSql({
+			docId:docId,
+			sql:"SELECT d2.*, value FROM doc d1, doc d2, string" +
+			" WHERE d1.parent=:docId " +
+			" AND d2.doctype=55" +
+			" AND d2.doc_id=string_id" +
+			" AND d2.parent=d1.doc_id",
+			afterRead:function(response){
+				docRootElement.links = []
+				angular.forEach(response.data.list, function(v){
+					docRootElement.links.push(v)
+				})
+			}
+		})
+
+	}
 	this.readTreeLevel = function(level, elementId){
 //		console.log(level)
 		var thisO = this
@@ -365,6 +381,7 @@ function JsonTree($scope, $http){
 
 	this.readDocBody = function(docId){
 		var thisO = this
+		if(!$scope.elementsMap[docId])
 		readSql({
 			sql:sql_amk025.amk025_template(),
 			jsonId:docId,
@@ -373,7 +390,7 @@ function JsonTree($scope, $http){
 				if(el){
 					if(el.docbody){
 						if(el.docbody.includes('SELECT')){
-						}else{
+						}else if(!$scope.elementsMap[docId]){
 							try{
 								var docbodyDocument = JSON.parse(el.docbody).docRoot
 								var docRootDoc = $scope.elementsMap[docId]
@@ -386,6 +403,7 @@ function JsonTree($scope, $http){
 								$scope.elementsMap[docId] = docRootDoc
 								console.log('readDocBody ',docId, docbodyDocument)
 								thisO.mapTree(docbodyDocument)
+								thisO.readLinks(docId, docbodyDocument)
 							}catch(e){
 								if (e instanceof SyntaxError) {
 									console.error(e)
@@ -424,17 +442,18 @@ function JsonTree($scope, $http){
 	this.readTree = function(elementId, docName){
 //		console.log(sql_1c.doc_read_elements()+" (" +elementId +")")
 		var thisO = this
+		if(!$scope.elementsMap[elementId])
 		readSql({
 			sql:sql_1c.doc_read_elements()+" (" +elementId +")",
 			afterRead:function(response){
 				var el = response.data.list[0]
-//				console.log(elementId, el)
 //				console.log('exe_fn.jsonTree.readTree '+el.doc_id, el)
-				if(el){
+				if(el && !$scope.elementsMap[el.doc_id]){
 					thisO.mapElement(el)
 					thisO.readTreeLevel(0, elementId)
 					if(docName){
 						$scope[docName] = el
+						console.log(elementId,'------readTree--------', el)
 					}
 				}
 			}

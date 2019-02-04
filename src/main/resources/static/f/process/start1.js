@@ -147,7 +147,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 			$scope.process_85236 = JSON.parse(response.data.list[0].docbody).docRoot
 			console.log($scope.process_85236)
 			exe_fn.jsonTree.mapTree($scope.process_85236)
-			console.log(85546, $scope.elementsMap[85546])
+			exe_fn.jsonTree.readLinks(85236, $scope.process_85236)
 		}
 	})
 
