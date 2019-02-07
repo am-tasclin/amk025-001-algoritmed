@@ -152,8 +152,9 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	})
 
 	$scope.openReferenceDocument = function(o){
-		console.log(o)
-		exe_fn.jsonTree.readDocBody(o.reference)
+		var referenceDocId = $scope.elementsMap[o.reference].reference
+		console.log(referenceDocId, o)
+		exe_fn.jsonTree.readDocBody(referenceDocId)
 		$scope.elementDialog.open(o)
 	}
 

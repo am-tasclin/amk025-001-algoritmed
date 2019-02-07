@@ -1,0 +1,17 @@
+<span data-ng-repeat="ifel in fr.children" data-ng-switch="ifel.value">
+	<span data-ng-switch-when="AND"> і </span> <span
+	data-ng-switch-when="age"
+	data-ng-class="{'w3-green':calcAgeGroup(ifel)}"> вік <span
+		data-ng-repeat="o2 in ifel.children"> {{o2.value}}</span>
+</span> <span data-ng-switch-default><span data-ng-if="!withCheck">
+			{{ifel.value}}
+			{{elementsMap[elementsMap[ifel.reference].parent].value}}
+			{{ifel.string_reference}} </span> <label data-ng-if="withCheck"> <input
+			type="checkbox" data-ng-model="fr.isChecked"
+			data-ng-click="setCheckPlanTask(fr)"
+			data-ng-checked="referenceElementPaars[fr.doc_id] || referenceElementPaars[fr.reference]" />
+			{{ifel.value}}
+			{{elementsMap[elementsMap[ifel.reference].parent].value}}
+			{{ifel.string_reference}}
+	</label> </span>
+</span>
