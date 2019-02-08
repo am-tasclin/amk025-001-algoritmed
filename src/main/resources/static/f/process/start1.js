@@ -37,6 +37,10 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		}
 	}
 	
+	$scope.setViewBlock = function(o){
+		console.log(o)
+		o.closeBlock = !o.closeBlock
+	}
 	$scope.setCheckPlanTask = function(o){
 		console.log(o)
 		console.log($scope.referenceElementPaars[o.doc_id])

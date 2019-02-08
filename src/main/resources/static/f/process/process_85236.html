@@ -6,7 +6,7 @@
 		</colgroup>
 		<thead>
 			<tr class="w3-tiny w3-blue-gray">
-				<th>завдання - дія</th>
+				<th>запити - завдання - дія</th>
 				<th>план</th>
 			</tr>
 		</thead>
@@ -17,9 +17,16 @@
 						data-ng-if="$index>0">
 						<div data-ng-repeat="ifsElemnt in [n.children[0].children[1]]"
 							class="w3-border" data-ng-if="ifsElemnt.allIfs">
-							{{n.value}} <span class="w3-tiny am-b">
-								{{elementsMap[85348].value}} </span>
-							<ul>
+							{{n.value}}
+							<div class="w3-tiny w3-blue-gray w3-hover-shadow w13-border"
+							style="margin-bottom: 1px;"
+								data-ng-click="setViewBlock(n.children[0])">{{elementsMap[85348].value}}</div>
+							<ul
+							data-ng-class="{
+							'w3-hide':n.children[0].closeBlock,
+							'w3-show':!n.children[0].closeBlock,
+							}"
+							>
 								<li data-ng-repeat="fr in n.children[0].children[0].children"
 									data-ng-init="withCheck=true;" data-ng-switch="fr.value"><span
 									data-ng-switch-when="if"> <span
@@ -33,6 +40,8 @@
 										data-ng-include="'/f/process/dd_value.html'"></span>
 								</label></li>
 							</ul>
+							<div class="w3-tiny w3-blue-gray w3-hover-shadow w13-border"
+								data-ng-click="setViewBlock(n,1)">{{elementsMap[85346].value}}</div>
 							<button class="w3-border"
 								data-ng-click="savePlanAction(n, n.children[0].children[0].children, [85236])">
 								OK, запис</button>
@@ -94,7 +103,6 @@
 									<div data-ng-repeat="o in n.children[1].children"
 										class="w3-hover-shadow">
 										{{1+$index}}. 
-										{{o.doc_id}} / {{o.reference}} 
 										{{o.value}} 
 										<span data-ng-repeat="o in [o]"
 										data-ng-include="'/f/process/dd_value.html'"></span>
