@@ -114,7 +114,7 @@ var initEdit_table = function($scope, $http){
 }
 
 function readRef($scope){
-	console.log($scope.referencesMap)
+//	console.log('readRef', $scope.referencesMap)
 	angular.forEach($scope.referencesMap, function(v,k){
 		if(!v){
 //			console.log(k)
@@ -265,8 +265,22 @@ readAmk = function($scope){
 	})
 }
 
-
 function Daybook($scope, $http){
+
+	var editElementDocBody = function(o){
+		console.log(o)
+		console.log($scope.elementNoteDialog)
+		if(!$scope.elementNoteDialog.docBodyElementId){
+			$scope.elementNoteDialog.docBodyElementId = o.doc_id
+		}else
+		if($scope.elementNoteDialog.docBodyElementId != o.doc_id){
+			$scope.elementNoteDialog.docBodyElementId = o.doc_id
+		}else{
+			delete $scope.elementNoteDialog.docBodyElementId
+		}
+	}
+	$scope.editElementDocBody = editElementDocBody
+
 	this.getDataElement = function(fnAfterSave){ 
 		var o = {
 				sql:"INSERT INTO doc (doctype, doc_id, parent, reference) " +
@@ -419,6 +433,7 @@ function JsonTree($scope, $http){
 	this.mapElement = function(element){
 		$scope.elementsMap[element.doc_id] = element
 		if(element.reference){
+//			console.log(element.reference, element)
 			$scope.referenceElementPaars[element.reference] = element.doc_id
 			this.readDocBody(element.reference)
 		}

@@ -50,12 +50,13 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	}
 
 	$scope.savePlanAction = function(o, list, path){
-		console.log(o)
-		console.log(list)
-		console.log(path)
-		var lastPathId = path.reverse()[0]
+		console.log(path,o,list)
+		var firstPathId = path.reverse()[0]
 		var data = { idn:0, sql:'',}
-		if($scope.referenceElementPaars[lastPathId]){// план обробляється вдруге
+
+		console.log(firstPathId ,$scope.referenceElementPaars,o.doc_id)
+		var firstPathDataId = $scope.referenceElementPaars[firstPathId]
+		if(firstPathDataId){// план обробляється вдруге
 			parentId = $scope.referenceElementPaars[o.doc_id]
 			console.log(parentId)
 			if(parentId){
@@ -64,7 +65,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 				angular.forEach(list, function(v){
 					var savedDataId = $scope.referenceElementPaars[v.doc_id]
 					if(savedDataId){
-//						if(!v.isChecked){//DELETE
+//						if(!v.isChecked)//DELETE
 						if(v.isDeletedChecked){//DELETE
 							data.sql += "DELETE FROM doc WHERE doc_id = "+savedDataId+";\n "
 						}
@@ -78,45 +79,60 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 				})
 				console.log(data.sql)
 				writeSql(data)
+			}else{
+				data.parent = firstPathDataId
+				data.idn = 1
+				console.log('--new code-----', firstPathDataId, data)
+				data.sql += "INSERT INTO doc (doctype, doc_id, parent, reference) " +
+				" VALUES (18, :nextDbId"+ data.idn +", "+ firstPathDataId +", "+ o.doc_id +");\n "
+				saveNosology(data, o, list, data.idn)
+				console.log(data.sql)
+				writeSql(data)
 			}
 		}else{// план обробляється вперше
 			$scope.addDaybook(function(response){// перший запис в щоденник 
 				console.log('-27--',response)
 				console.log(response.data.nextDbId1)
 				data.parent = response.data.nextDbId1
-				angular.forEach(path, function(v,k){
-					data.idn++
-					if(k>0){
-						data.sql += "INSERT INTO doc (doctype, doc_id, parent, reference) " +
-						" VALUES (18, :nextDbId"+ data.idn +", :nextDbId"+(data.idn-1)+", "+v+");\n "
-					}else{
-						data.sql += "INSERT INTO doc (doctype, doc_id, parent, reference) " +
-						" VALUES (18, :nextDbId"+ data.idn +", :parent, "+v+");\n "
-					}
-				})
-				if(data.idn > 0){
-					var parent = data.idn
-					data.idn++
-					data.sql += "INSERT INTO doc (doctype, doc_id, parent, reference) " +
-					" VALUES (18, :nextDbId"+ data.idn +", :nextDbId"+ parent +", "+ o.doc_id +");\n "
-					parent = data.idn
-					angular.forEach(list, function(v){
-						if(v.isChecked){
-							data.idn++
-							if(v.reference){
-								data.sql += "INSERT INTO doc (doctype, doc_id, parent, reference, reference2) " +
-								" VALUES (18, :nextDbId"+ data.idn +", "+ data.parent +", "+ v.reference +", "+ v.reference +");\n "
-							}else{
-								data.sql += "INSERT INTO doc (doctype, doc_id, parent, reference) " +
-								" VALUES (18, :nextDbId"+ data.idn +", :nextDbId"+ parent +", "+ v.doc_id +");\n "
-							}
-							console.log(v.sort)
-						}
-					})
-					console.log(data.sql)
-					writeSql(data)
-				}
+				data.idn = 1
+				savePlanExecute(data, o, list, path)
 			})
+		}
+	}
+	
+	var saveNosology = function(data, o, list, parentNextDbId){
+		angular.forEach(list, function(v){
+			if(v.isChecked){
+				data.idn++
+				if(v.reference){
+					data.sql += "INSERT INTO doc (doctype, doc_id, parent, reference, reference2) " +
+					" VALUES (18, :nextDbId"+ data.idn +", "+ data.parent +", "+ v.reference +", "+ v.reference +");\n "
+				}else{
+					data.sql += "INSERT INTO doc (doctype, doc_id, parent, reference) " +
+					" VALUES (18, :nextDbId"+ data.idn +", :nextDbId"+ parentNextDbId +", "+ v.doc_id +");\n "
+				}
+				console.log(v.sort)
+			}
+		})
+	}
+
+	var savePlanExecute = function(data, o, list, path){
+		data.sql += "INSERT INTO doc (doctype, doc_id, parent, reference) " +
+		" VALUES (18, :nextDbId"+ data.idn +", :parent, "+path[0]+");\n "
+		angular.forEach(path.slice(1), function(v,k){
+			data.idn++
+			data.sql += "INSERT INTO doc (doctype, doc_id, parent, reference) " +
+			" VALUES (18, :nextDbId"+ data.idn +", :nextDbId"+(data.idn-1)+", "+v+");\n "
+		})
+		if(data.idn > 0){
+			var parentNextDbId = data.idn
+			data.idn++
+			data.sql += "INSERT INTO doc (doctype, doc_id, parent, reference) " +
+			" VALUES (18, :nextDbId"+ data.idn +", :nextDbId"+ parentNextDbId +", "+ o.doc_id +");\n "
+			parentNextDbId = data.idn
+			saveNosology(data, o, list, data.idn)
+			console.log(data.sql)
+			writeSql(data)
 		}
 	}
 
@@ -133,7 +149,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 						allIfs = allIfs || v2.ifIs
 					}
 				})
-				console.log(allIfs)
+				//console.log(allIfs)
 				ifsElemnt.allIfs = allIfs
 			}
 		})
