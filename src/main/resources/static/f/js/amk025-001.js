@@ -267,6 +267,12 @@ readAmk = function($scope){
 
 function Daybook($scope, $http){
 
+	var saveElementDocBody = function(o){
+		console.log(o)
+		var data = o
+		data.sql = "INSERT INTO docbody (docbody_id, docbody) VALUES (:doc_id, :docbody)"
+		writeSql(data)
+	}
 	var editElementDocBody = function(o){
 		console.log(o)
 		console.log($scope.elementNoteDialog)
@@ -280,6 +286,7 @@ function Daybook($scope, $http){
 		}
 	}
 	$scope.editElementDocBody = editElementDocBody
+	$scope.saveElementDocBody = saveElementDocBody
 
 	this.getDataElement = function(fnAfterSave){ 
 		var o = {
