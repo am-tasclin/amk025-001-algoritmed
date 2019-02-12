@@ -5,44 +5,6 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	exe_fn.daybook = new Daybook($scope, $http)
 	console.log(exe_fn.daybook)
 	
-	
-	$scope.elementNoteDialog = {
-		elementId:0, style:{display:'none'},
-	}
-	$scope.elementNoteDialog.remove = function(){
-		console.log(this)
-		var data = {
-			doc_id:this.o.doc_id,
-			sql:"DELETE FROM doc WHERE doc_id IN (SELECT d3.doc_id FROM doc d1, doc d2, doc d3 " +
-			" WHERE d3.parent = d2.doc_id AND d2.parent = d1.doc_id AND d1.parent = :doc_id);\n " +
-			"DELETE FROM doc WHERE doc_id IN (SELECT d2.doc_id FROM doc d1, doc d2 " +
-			" WHERE d2.parent = d1.doc_id AND d1.parent = :doc_id);\n " +
-			"DELETE FROM docbody WHERE docbody_id = :doc_id;\n " +
-			"DELETE FROM doc WHERE :doc_id IN (parent, doc_id);"
-		}
-		console.log(data)
-		writeSql(data)
-		
-	}
-	$scope.elementNoteDialog.save = function(){
-		$scope.saveDataDocbody(this)
-	}
-	$scope.elementNoteDialog.close = function(){
-		this.style		= {display:'none'}
-	}
-	$scope.elementNoteDialog.open = function(o){
-		console.log(this)
-		this.o				= o
-		this.elementId		= o.doc_id
-		this.style			= {display:'block'}
-		var amkElId			= o.doc_id
-		var patientAmkEl	= $scope.elementsMap[$scope.referenceElementPaars[amkElId]]
-		if(patientAmkEl){
-			this.note		= patientAmkEl.docbody
-		}else{
-			delete this.note
-		}
-	}
 
 	$scope.saveDataDocbody = function(colO){
 		console.log($scope.elementsMap[$scope.request.parameters.amk])

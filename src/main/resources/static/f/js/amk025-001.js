@@ -38,10 +38,12 @@ var initApp = function($scope, $http){
 		o.calcIf = evl
 		return o.calcIf
 	}
+
 	$scope.getGenderOfPatient = function (){
 		var g = $scope.elementsMap[$scope.elementsMap[$scope.referenceElementPaars[85370]].reference2].string
 		return g
 	}
+
 	$scope.getAgeOfPatient = function (){
 		if($scope.referenceElementPaars[85247]){
 			var d1 = $scope.elementsMap[$scope.referenceElementPaars[85247]].date
@@ -267,15 +269,104 @@ readAmk = function($scope){
 
 function Daybook($scope, $http){
 
+	$scope.elementNoteDialog = {
+		elementId:0, style:{display:'none'},
+	}
+	$scope.elementNoteDialog.remove = function(){
+		console.log(this)
+		var data = {
+			doc_id:this.o.doc_id,
+			sql:"DELETE FROM doc WHERE doc_id IN (SELECT d3.doc_id FROM doc d1, doc d2, doc d3 " +
+			" WHERE d3.parent = d2.doc_id AND d2.parent = d1.doc_id AND d1.parent = :doc_id);\n " +
+			"DELETE FROM doc WHERE doc_id IN (SELECT d2.doc_id FROM doc d1, doc d2 " +
+			" WHERE d2.parent = d1.doc_id AND d1.parent = :doc_id);\n " +
+			"DELETE FROM docbody WHERE docbody_id = :doc_id;\n " +
+			"DELETE FROM doc WHERE :doc_id IN (parent, doc_id);"
+		}
+		console.log(data)
+		writeSql(data)
+		
+	}
+	$scope.elementNoteDialog.save = function(){
+		$scope.saveDataDocbody(this)
+	}
+	$scope.elementNoteDialog.close = function(){
+		this.style		= {display:'none'}
+	}
+	$scope.elementNoteDialog.open = function(o){
+		console.log(this)
+		this.o				= o
+		this.elementId		= o.doc_id
+		if(!$scope.elementNoteDialog.docBodyElementId)
+			this.style			= {display:'block'}
+		var amkElId			= o.doc_id
+		var patientAmkEl	= $scope.elementsMap[$scope.referenceElementPaars[amkElId]]
+		if(patientAmkEl){
+			this.note		= patientAmkEl.docbody
+		}else{
+			delete this.note
+		}
+	}
+
+	var elementData = {}
+	elementData.init_85357 = function(o,data){
+		o.at = {}
+		angular.forEach($scope.elementsMap[o.reference].children, function(v){
+			angular.forEach(o.children, function(d){
+				if(d.reference==v.doc_id){
+					o.at[v.doc_id] = d
+				}
+			})
+		})
+	}
+
+	elementData.save_85357 = function(o,data){
+		console.log(o.children, $scope.elementsMap[o.reference].children)
+		data.nextDbIdNr 
+		elementData.init_85357(o,data)
+		angular.forEach($scope.elementsMap[o.reference].children, function(v){
+			console.log(v)
+			d = o.at[v.doc_id]
+			if(d){
+				if(v.int){
+					data.sql += "UPDATE integer SET value = "+v.int+" WHERE integer_id = "+d.doc_id+"; "
+				}else{
+					data.sql += "DELETE FROM doc WHERE doc_id = "+d.doc_id+"; "
+				}
+			}else{
+				if(v.int){
+					data.sql += "INSERT INTO doc (doc_id, reference, parent) " +
+					"VALUES(:nextDbId"+data.nextDbIdNr+", "+v.doc_id+", "+o.doc_id+" ); " +
+					"INSERT INTO integer (integer_id, value) " +
+					"VALUES (:nextDbId"+data.nextDbIdNr+", "+v.int+"); "
+					data.nextDbIdNr++
+				}
+			}
+		})
+	}
 	var saveElementDocBody = function(o){
 		console.log(o)
 		var data = o
-		data.sql = "INSERT INTO docbody (docbody_id, docbody) VALUES (:doc_id, :docbody)"
+		data.nextDbIdNr=1
+		if(data.docbody_id){
+			data.sql = "UPDATE docbody SET docbody = :docbody WHERE docbody_id=:doc_id; "
+		}else{
+			data.sql = "INSERT INTO docbody (docbody_id, docbody) VALUES (:doc_id, :docbody);"
+		}
+		console.log($scope.elementsMap[o.reference])
+		if(elementData['save_'+o.reference])
+			elementData['save_'+o.reference](o,data)
 		writeSql(data)
+		delete $scope.elementNoteDialog.docBodyElementId
 	}
-	var editElementDocBody = function(o){
+
+	elementData.open_85357 = function(o,data){
 		console.log(o)
-		console.log($scope.elementNoteDialog)
+		elementData.init_85357(o)
+	}
+
+	var editElementDocBody = function(o){
+		console.log(o, $scope.elementNoteDialog)
 		if(!$scope.elementNoteDialog.docBodyElementId){
 			$scope.elementNoteDialog.docBodyElementId = o.doc_id
 		}else
@@ -284,7 +375,10 @@ function Daybook($scope, $http){
 		}else{
 			delete $scope.elementNoteDialog.docBodyElementId
 		}
+		if(elementData['open_'+o.reference])
+			elementData['open_'+o.reference](o)
 	}
+
 	$scope.editElementDocBody = editElementDocBody
 	$scope.saveElementDocBody = saveElementDocBody
 
