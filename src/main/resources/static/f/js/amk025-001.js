@@ -320,6 +320,10 @@ function Daybook($scope, $http){
 		})
 	}
 
+	elementData.save_86811 = function(o,data){
+		console.log(o.children, $scope.elementsMap[o.reference].children)
+		elementData.save_85357(o,data)
+	}
 	elementData.save_85357 = function(o,data){
 		console.log(o.children, $scope.elementsMap[o.reference].children)
 		data.nextDbIdNr 
