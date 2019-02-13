@@ -320,6 +320,18 @@ function Daybook($scope, $http){
 		})
 	}
 
+	elementData.open_86811 = function(o,data){
+		elementData.open_85357(o,data)
+	}
+	elementData.open_85357 = function(o,data){
+		console.log(o, $scope.elementsMap[o.reference])
+		elementData.init_85357(o)
+		angular.forEach($scope.elementsMap[o.reference].children, function(v){
+			if(o.at[v.doc_id])
+				v.int = o.at[v.doc_id].vinteger
+		})
+	}
+
 	elementData.save_86811 = function(o,data){
 		console.log(o.children, $scope.elementsMap[o.reference].children)
 		elementData.save_85357(o,data)
@@ -362,11 +374,6 @@ function Daybook($scope, $http){
 			elementData['save_'+o.reference](o,data)
 		writeSql(data)
 		delete $scope.elementNoteDialog.docBodyElementId
-	}
-
-	elementData.open_85357 = function(o,data){
-		console.log(o)
-		elementData.init_85357(o)
 	}
 
 	var editElementDocBody = function(o){
@@ -480,22 +487,26 @@ function JsonTree($scope, $http){
 	this.readTreeLevel = function(level, elementId){
 //		console.log(level)
 		var thisO = this
-		readSql({
-			sql:sql_1c['doc_read_elements_'+level](),
-			docId:elementId,
-			afterRead:function(response){
-				var list = response.data.list
-				angular.forEach(list, function(el){
-					var p = $scope.elementsMap[el.parent]
-					if(!p.children) p.children = []
-					p.children.push(el)
-					thisO.mapElement(el)
-				})
-				if(list[0]){
-					thisO.readTreeLevel(++level, elementId)
+		if(sql_1c['doc_read_elements_'+level]){
+			readSql({
+				sql:sql_1c['doc_read_elements_'+level](),
+				docId:elementId,
+				afterRead:function(response){
+					var list = response.data.list
+					angular.forEach(list, function(el){
+						var p = $scope.elementsMap[el.parent]
+						if(!p.children) p.children = []
+						p.children.push(el)
+						thisO.mapElement(el)
+					})
+					if(list[0]){
+						thisO.readTreeLevel(++level, elementId)
+					}
 				}
-			}
-		})
+			})
+		}else{
+			console.error('--bad level---------',level)
+		}
 	}
 
 	this.readDocBody = function(docId){

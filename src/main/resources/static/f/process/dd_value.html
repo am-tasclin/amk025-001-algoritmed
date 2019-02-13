@@ -3,12 +3,12 @@
 		data-ng-if="'DataDictionary'!=elementsMap[elementsMap[o.reference].parent].value">
 			{{elementsMap[elementsMap[o.reference].parent].value}} </span>
 		{{o.string_reference}}
-</span> <span data-ng-if="withEdit" class="w3-hover-shadow w3-dropdown-click"
+</span> <a href="#" data-ng-if="withEdit" class="w3-hover-shadow w3-dropdown-click am-0u"
 	data-ng-click="editElementDocBody(o); $event.stopPropagation();">
 		<span
 		data-ng-if="'DataDictionary'!=elementsMap[elementsMap[o.reference].parent].value">
 			{{elementsMap[elementsMap[o.reference].parent].value}} </span>
 		{{o.string_reference}} {{o.docbody}} <span data-ng-repeat="c1 in [o]"
 		data-ng-include="'/f/amk025/l1/edit_daybook_element.html'"> </span>
-</span>
+</a>
 </span>

@@ -1,7 +1,8 @@
+.am-n {font-weight: normal;}
 .am-b {font-weight: bold;}
 .am-i {font-style: italic; }
 .am-u {text-decoration: underline; }
-.am-n {font-weight: normal;}
+a.am-0u {text-decoration: none; }
 
 table.am-amk025-table tr td{
 	vertical-align: top;
