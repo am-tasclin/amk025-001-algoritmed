@@ -35,7 +35,7 @@
 										data-ng-init="withCheck=true;" data-ng-switch="fr.value"><span
 										data-ng-switch-when="if"> <span
 											data-ng-include="'/f/process/process_ifel.html'"> </span>
-									</span> <label data-ng-switch-default
+									</span> <label data-ng-switch-default class="w3-hover-shadow"
 										data-ng-class="{'w3-green':referenceElementPaars[fr.doc_id] || referenceElementPaars[fr.reference]}">
 											<input type="checkbox" data-ng-model="fr.isChecked"
 											data-ng-click="setCheckPlanTask(fr)"
@@ -56,6 +56,7 @@
 										data-ng-switch-when="if"> <span
 											data-ng-include="'/f/process/process_ifel.html'"> </span>
 									</span> <label data-ng-switch-default
+									class="w3-hover-shadow"
 										data-ng-class="{'w3-green':referenceElementPaars[fr.doc_id] || referenceElementPaars[fr.reference]}">
 											<input type="checkbox" data-ng-model="fr.isChecked"
 											data-ng-click="setCheckPlanTask2(fr)"
@@ -64,9 +65,11 @@
 											data-ng-include="'/f/process/dd_value.html'"></span>
 									</label></li>
 								</ul>
-								<button class="w3-border"
-									data-ng-click="savePlanAction(n, n.children[0].children[0].children, [85236])">
-									OK, запис</button>
+								<div>
+									<button class="w3-border"
+										data-ng-click="savePlanAction(n, n.children[0].children[0].children, [85236])">
+										OK, запис</button>
+								</div>
 							</div>
 						</div>
 					</div>

@@ -49,6 +49,23 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		}
 	}
 
+	var saveToDoAction = function(o, data, parentId){
+		console.log(parentId, o, o.children[1].children)
+		var oToDoPlanId = o.children[1].doc_id,
+		oToDoId = $scope.referenceElementPaars[oToDoPlanId]
+		console.log(oToDoId)
+		if(!oToDoId){
+			data.idn++
+			data.sql += "INSERT INTO (doc_id, parent, reference ) " +
+			"VALUES (:nextDbId"+data.idn+", "+parentId+", "+oToDoPlanId+" ); "
+		}
+		angular.forEach(o.children[1].children, function(v){
+			if(v.isChecked){
+				console.log(v)
+			}
+		})
+	}
+
 	$scope.savePlanAction = function(o, list, path){
 		console.log(path,o,list)
 		var firstPathId = path.reverse()[0]
@@ -61,7 +78,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 			console.log(parentId)
 			if(parentId){
 				data.parent = parentId
-				console.log(data)
+				console.log(data, list)
 				angular.forEach(list, function(v){
 					var savedDataId = $scope.referenceElementPaars[v.doc_id]
 					if(savedDataId){
@@ -77,8 +94,11 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 						}
 					}
 				})
+				saveToDoAction(o, data, parentId)
 				console.log(data.sql)
-				writeSql(data)
+				if(data.sql){
+//					writeSql(data)
+				}
 			}else{
 				data.parent = firstPathDataId
 				data.idn = 1
