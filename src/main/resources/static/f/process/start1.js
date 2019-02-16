@@ -43,15 +43,16 @@ app.controller('MyCtrl', function($scope, $http, $interval, $filter) {
 		o.closeBlock = !o.closeBlock
 	}
 
-	var saveToDoAction = function(o, data, parentId){
-		console.log(parentId, o, o.children[1].children)
-		var oToDoPlanId = o.children[1].doc_id,
-		oToDoId = $scope.referenceElementPaars[oToDoPlanId]
+	var saveToDoAction = function(o, data, parentId, actionsId){
+		console.log(parentId, actionsId, o, o.children[1].children)
+//		var oToDoPlanId = o.children[1].doc_id,
+//		oToDoId = $scope.referenceElementPaars[oToDoPlanId]
+		oToDoId = $scope.referenceElementPaars[actionsId]
 		console.log(oToDoId)
 		if(!oToDoId){
 			data.idnParent = ++data.idn
-			data.sql += "INSERT INTO (doc_id, parent, reference ) " +
-			"VALUES (:nextDbId"+data.idn+", "+parentId+", "+oToDoPlanId+" ); "
+			data.sql += "INSERT INTO doc (doc_id, parent, reference ) " +
+			"VALUES (:nextDbId"+data.idn+", "+parentId+", "+actionsId+" ); "
 		}
 		angular.forEach(o.children[1].children, function(v){
 			if(v.isChecked){
@@ -75,6 +76,7 @@ app.controller('MyCtrl', function($scope, $http, $interval, $filter) {
 			myCtrl.setCheckPlanTask(v, o.isChecked)
 		})
 	}
+
 	myCtrl.setCheckPlanTask = function(o, isChecked){
 		console.log(isChecked, o)
 		if(isChecked === undefined){}else
@@ -113,10 +115,10 @@ app.controller('MyCtrl', function($scope, $http, $interval, $filter) {
 						}
 					}
 				})
-				saveToDoAction(o, data, parentId)
+				saveToDoAction(o, data, parentId, 85346)//85346 - Методи виявлення
 				console.log(data.sql)
 				if(data.sql){
-//					writeSql(data)
+					writeSql(data)
 				}
 			}else{
 				data.parent = firstPathDataId
