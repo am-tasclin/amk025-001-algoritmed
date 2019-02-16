@@ -1,4 +1,5 @@
-app.controller('myCtrl', function($scope, $http, $interval, $filter) {
+app.controller('MyCtrl', function($scope, $http, $interval, $filter) {
+	var myCtrl = this
 	initApp($scope, $http)
 	console.log($scope.request.parameters)
 	exe_fn.jsonTree = new JsonTree($scope, $http)
@@ -41,13 +42,6 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		console.log(o)
 		o.closeBlock = !o.closeBlock
 	}
-	$scope.setCheckPlanTask = function(o){
-		console.log(o)
-		console.log($scope.referenceElementPaars[o.doc_id])
-		if($scope.referenceElementPaars[o.doc_id]){
-			o.isDeletedChecked = !o.isDeletedChecked
-		}
-	}
 
 	var saveToDoAction = function(o, data, parentId){
 		console.log(parentId, o, o.children[1].children)
@@ -55,18 +49,43 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		oToDoId = $scope.referenceElementPaars[oToDoPlanId]
 		console.log(oToDoId)
 		if(!oToDoId){
-			data.idn++
+			data.idnParent = ++data.idn
 			data.sql += "INSERT INTO (doc_id, parent, reference ) " +
 			"VALUES (:nextDbId"+data.idn+", "+parentId+", "+oToDoPlanId+" ); "
 		}
 		angular.forEach(o.children[1].children, function(v){
 			if(v.isChecked){
 				console.log(v)
+				data.idn++
+				if(!oToDoId || data.idnParent){
+					data.sql += "INSERT INTO doc (doc_id, parent, reference) " +
+					"VALUES (:nextDbId"+data.idn+", :nextDbId"+data.idnParent+", "+v.doc_id+"); "
+				}else{
+					data.sql += "INSERT INTO doc (doc_id, parent, reference) " +
+					"VALUES (:nextDbId"+data.idn+", "+oToDoId+", "+v.doc_id+"); "
+				}
 			}
 		})
 	}
 
-	$scope.savePlanAction = function(o, list, path){
+	myCtrl.checkAll = function(o){
+		console.log(o)
+		o.isChecked = !o.isChecked
+		angular.forEach(o.children, function(v){
+			myCtrl.setCheckPlanTask(v, o.isChecked)
+		})
+	}
+	myCtrl.setCheckPlanTask = function(o, isChecked){
+		console.log(isChecked, o)
+		if(isChecked === undefined){}else
+			o.isChecked = isChecked
+		console.log($scope.referenceElementPaars[o.doc_id])
+		if($scope.referenceElementPaars[o.doc_id]){
+			o.isDeletedChecked = !o.isDeletedChecked
+		}
+	}
+
+	myCtrl.savePlanAction = function(o, list, path){
 		console.log(path,o,list)
 		var firstPathId = path.reverse()[0]
 		var data = { idn:0, sql:'',}

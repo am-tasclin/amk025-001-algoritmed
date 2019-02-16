@@ -38,7 +38,7 @@
 									</span> <label data-ng-switch-default class="w3-hover-shadow"
 										data-ng-class="{'w3-green':referenceElementPaars[fr.doc_id] || referenceElementPaars[fr.reference]}">
 											<input type="checkbox" data-ng-model="fr.isChecked"
-											data-ng-click="setCheckPlanTask(fr)"
+											data-ng-click="myCtrl.setCheckPlanTask(fr)"
 											data-ng-checked="referenceElementPaars[fr.doc_id] || referenceElementPaars[fr.reference]" />
 											{{fr.value}} <span data-ng-repeat="o in [fr]"
 											data-ng-include="'/f/process/dd_value.html'"></span>
@@ -51,14 +51,20 @@
 							'w3-hide':n.children[1].closeBlock,
 							'w3-show':!n.children[1].closeBlock,
 							}">
+									<li class="w3-tiny w3-hover-shadow"
+										data-ng-click="myCtrl.checkAll(n.children[1])"><label>
+											<input type="checkbox"
+											data-ng-model="n.children[1].isChecked">
+											<i class="fa fa-asterisk" aria-hidden="true"></i>
+											всі
+									</label></li>
 									<li data-ng-repeat="fr in n.children[1].children"
 										data-ng-init="withCheck=true;" data-ng-switch="fr.value"><span
 										data-ng-switch-when="if"> <span
 											data-ng-include="'/f/process/process_ifel.html'"> </span>
-									</span> <label data-ng-switch-default
-									class="w3-hover-shadow"
+									</span> <label data-ng-switch-default class="w3-hover-shadow"
 										data-ng-class="{'w3-green':referenceElementPaars[fr.doc_id] || referenceElementPaars[fr.reference]}">
-											<input type="checkbox" data-ng-model="fr.isChecked"
+											<input type="checkbox" data-ng-model="fr.isChecked "
 											data-ng-click="setCheckPlanTask2(fr)"
 											data-ng-checked="referenceElementPaars[fr.doc_id] || referenceElementPaars[fr.reference]" />
 											{{fr.value}} <span data-ng-repeat="o in [fr]"
@@ -67,7 +73,7 @@
 								</ul>
 								<div>
 									<button class="w3-border"
-										data-ng-click="savePlanAction(n, n.children[0].children[0].children, [85236])">
+										data-ng-click="myCtrl.savePlanAction(n, n.children[0].children[0].children, [85236])">
 										OK, запис</button>
 								</div>
 							</div>
