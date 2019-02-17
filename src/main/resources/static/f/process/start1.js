@@ -62,11 +62,11 @@ app.controller('MyCtrl', function($scope, $http, $interval, $filter) {
 				console.log(v)
 				data.idn++
 				if(!oToDoId || data.idnParent){
-					data.sql += "INSERT INTO doc (doc_id, parent, reference) " +
-					"VALUES (:nextDbId"+data.idn+", :nextDbId"+data.idnParent+", "+v.doc_id+"); "
+					data.sql += "INSERT INTO doc (doc_id, parent, reference, reference2) " +
+					"VALUES (:nextDbId"+data.idn+", :nextDbId"+data.idnParent+", "+v.doc_id+", "+v.reference+"); "
 				}else{
-					data.sql += "INSERT INTO doc (doc_id, parent, reference) " +
-					"VALUES (:nextDbId"+data.idn+", "+oToDoId+", "+v.doc_id+"); "
+					data.sql += "INSERT INTO doc (doc_id, parent, reference, reference2) " +
+					"VALUES (:nextDbId"+data.idn+", "+oToDoId+", "+v.doc_id+", "+v.reference+"); "
 				}
 			}
 		})

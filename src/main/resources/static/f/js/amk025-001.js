@@ -243,6 +243,7 @@ sql_1c.doc_read_elements = function(){
 	"\n LEFT JOIN (SELECT value vinteger, integer_id FROM integer) integer ON integer_id=doc_id " +
 	"\n LEFT JOIN docbody ON docbody_id=doc_id " +
 	"\n LEFT JOIN (SELECT doc_id, s.value string_reference FROM doc LEFT JOIN string s ON string_id=doc_id ) d2 ON d2.doc_id=d1.reference " +
+	"\n LEFT JOIN (SELECT doc_id, s.value string_reference2 FROM doc LEFT JOIN string s ON string_id=doc_id ) d3 ON d3.doc_id=d1.reference2 " +
 	"LEFT JOIN sort ON sort_id=d1.doc_id " +
 	"WHERE d1.doc_id IN "
 }
