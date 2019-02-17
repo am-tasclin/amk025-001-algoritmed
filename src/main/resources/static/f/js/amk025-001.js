@@ -360,6 +360,15 @@ function Daybook($scope, $http){
 			}
 		})
 	}
+
+	var removeElementDayBook = function(o){
+		console.log(o)
+		var data = o
+		data.sql = "DELETE FROM doc WHERE doc_id=:doc_id; "
+		writeSql(data)
+	}
+	$scope.removeElementDayBook = removeElementDayBook
+
 	var saveElementDocBody = function(o){
 		console.log(o)
 		var data = o
@@ -375,6 +384,7 @@ function Daybook($scope, $http){
 		writeSql(data)
 		delete $scope.elementNoteDialog.docBodyElementId
 	}
+	$scope.saveElementDocBody = saveElementDocBody
 
 	var editElementDocBody = function(o){
 		console.log(o, $scope.elementNoteDialog)
@@ -389,9 +399,8 @@ function Daybook($scope, $http){
 		if(elementData['open_'+o.reference])
 			elementData['open_'+o.reference](o)
 	}
-
 	$scope.editElementDocBody = editElementDocBody
-	$scope.saveElementDocBody = saveElementDocBody
+
 
 	this.getDataElement = function(fnAfterSave){ 
 		var o = {

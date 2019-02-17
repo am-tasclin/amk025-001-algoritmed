@@ -44,11 +44,14 @@ app.controller('MyCtrl', function($scope, $http, $interval, $filter) {
 	}
 
 	var saveToDoAction = function(o, data, parentId, actionsId){
-		console.log(parentId, actionsId, o, o.children[1].children)
 //		var oToDoPlanId = o.children[1].doc_id,
 //		oToDoId = $scope.referenceElementPaars[oToDoPlanId]
-		oToDoId = $scope.referenceElementPaars[actionsId]
-		console.log(oToDoId)
+//		oToDoId = $scope.referenceElementPaars[actionsId]
+		var oToDoId
+		angular.forEach($scope.elementsMap[parentId].children, function(v){
+			if(actionsId == v.reference)
+				oToDoId = v.doc_id })
+		console.log(oToDoId, parentId, actionsId, o, o.children[1])
 		if(!oToDoId){
 			data.idnParent = ++data.idn
 			data.sql += "INSERT INTO doc (doc_id, parent, reference ) " +
