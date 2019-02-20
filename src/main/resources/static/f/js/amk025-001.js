@@ -184,6 +184,18 @@ var writeSql = function(data){
 }
 
 var sql_1c = {}
+sql_1c.doc_read_elements_6 = function(){
+	return this.doc_read_elements() +
+	"(SELECT d6.doc_id FROM doc d, doc d0, doc d1, doc d2, doc d3, doc d4, doc d5, doc d6 " +
+	"WHERE d.doc_id=:docId AND d0.parent=d.doc_id " +
+	"AND d1.parent=d0.doc_id " +
+	"AND d2.parent=d1.doc_id " +
+	"AND d3.parent=d2.doc_id " +
+	"AND d4.parent=d3.doc_id " +
+	"AND d5.parent=d4.doc_id " +
+	"AND d6.parent=d5.doc_id " +
+	")"
+}
 sql_1c.doc_read_elements_5 = function(){
 	return this.doc_read_elements() +
 	"(SELECT d5.doc_id FROM doc d, doc d0, doc d1, doc d2, doc d3, doc d4, doc d5 " +
@@ -241,6 +253,7 @@ sql_1c.doc_read_elements = function(){
 	"\n LEFT JOIN (SELECT value date, date_id FROM date) date ON date_id=doc_id " +
 	"\n LEFT JOIN (SELECT value ts, timestamp_id FROM timestamp) timestamp ON timestamp_id=doc_id " +
 	"\n LEFT JOIN (SELECT value vinteger, integer_id FROM integer) integer ON integer_id=doc_id " +
+	"\n LEFT JOIN (SELECT value vdouble, double_id FROM double) double ON double_id=doc_id " +
 	"\n LEFT JOIN docbody ON docbody_id=doc_id " +
 	"\n LEFT JOIN (SELECT doc_id, r.value real_reference FROM doc, double r WHERE double_id=doc_id ) r2 ON r2.doc_id=d1.reference " +
 	"\n LEFT JOIN (SELECT doc_id, s.value string_reference FROM doc LEFT JOIN string s ON string_id=doc_id ) d2 ON d2.doc_id=d1.reference " +
@@ -337,10 +350,6 @@ function Daybook($scope, $http){
 	$scope.edit_data_ids = [86973, 86811, 85357]
 	$scope.view_data_ids = [85357]
 
-	elementData.save_86973 = function(o,data){
-		console.log(o, data)
-	}
-
 	elementData.save_86811 = function(o,data){
 		console.log(o.children, $scope.elementsMap[o.reference].children)
 		elementData.save_85357(o,data)
@@ -379,10 +388,21 @@ function Daybook($scope, $http){
 	}
 	$scope.removeElementDayBook = removeElementDayBook
 
+	elementData.save_86973 = function(o,data){// Холестерин загальний
+		data.nextDbIdNr++
+		data.sql += "INSERT INTO doc (doc_id, parent, reference, reference2) " +
+		" VALUES (:nextDbId"+data.nextDbIdNr+", "+data.doc_id+", "+o.reference+", "+$scope.elementsMap[o.reference].children[0].doc_id+" ); "
+		data.sql += "\n INSERT INTO double (double_id, value) " +
+		" VALUES (:nextDbId"+data.nextDbIdNr+", "+o.real_value+"); "
+		console.log(o, data, $scope.elementsMap[o.reference]
+		, $scope.elementsMap[o.reference].children[0]
+		, data.sql)
+	}
+
 	var saveElementDocBody = function(o){
-		console.log(o)
 		var data = o
-		data.nextDbIdNr=1
+//		data.nextDbIdNr=1
+		data.nextDbIdNr=0
 		if(data.docbody_id){
 			data.sql = "UPDATE docbody SET docbody = :docbody WHERE docbody_id=:doc_id; "
 		}else{
@@ -392,11 +412,11 @@ function Daybook($scope, $http){
 		if(elementData['save_'+o.reference])
 			elementData['save_'+o.reference](o,data)
 		angular.forEach($scope.elementsMap[o.reference].children, function(v){
-			console.log(v.reference,v)
+			console.log(v.reference)
 			if(elementData['save_'+v.reference])
 				elementData['save_'+v.reference](v,data)
 		})
-//		writeSql(data)
+		writeSql(data)
 		delete $scope.elementNoteDialog.docBodyElementId
 	}
 
@@ -507,8 +527,8 @@ function JsonTree($scope, $http){
 				})
 			}
 		})
-
 	}
+
 	this.readTreeLevel = function(level, elementId){
 //		console.log(level)
 		var thisO = this
@@ -519,6 +539,7 @@ function JsonTree($scope, $http){
 				afterRead:function(response){
 					var list = response.data.list
 					angular.forEach(list, function(el){
+						el.l = level
 						var p = $scope.elementsMap[el.parent]
 						if(!p.children) p.children = []
 						p.children.push(el)
@@ -530,7 +551,8 @@ function JsonTree($scope, $http){
 				}
 			})
 		}else{
-			console.error('--bad level---------',level)
+			console.error('--bad level---------',level, sql_1c['doc_read_elements_'+level] )
+			console.error( sql_1c['doc_read_elements_'+level]() )
 		}
 	}
 
