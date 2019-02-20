@@ -24,14 +24,10 @@
 			</div>
 		</span>
 	</div>
-	a112233
-	{{c1.reference}}
-	<!-- 
-	<div data-ng-if="c1.reference"
+	<div data-ng-if="edit_data_ids.includes(c1.reference)"
 		data-ng-include="'/f/amk025/l1/edit_data_'+c1.reference+'.html'"></div>
 	<div data-ng-repeat="o in [elementsMap[c1.reference].children[0]]"
-		data-ng-if="o.reference"
+		data-ng-if="edit_data_ids.includes(o.reference)"
 		data-ng-include="'/f/amk025/l1/edit_data_'+o.reference+'.html'"></div>
-	 -->
 	<textarea rows="3" cols="45" data-ng-model="c1.docbody"></textarea>
 </span>

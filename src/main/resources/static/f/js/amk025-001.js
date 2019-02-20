@@ -334,8 +334,9 @@ function Daybook($scope, $http){
 		})
 	}
 
-	$scope.subNodes = [86973, 86811, 85357]
+	$scope.edit_data_ids = [86973, 86811, 85357]
 	$scope.view_data_ids = [85357]
+
 	elementData.save_86973 = function(o,data){
 		console.log(o, data)
 	}
