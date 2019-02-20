@@ -334,10 +334,17 @@ function Daybook($scope, $http){
 		})
 	}
 
+	$scope.subNodes = [86973, 86811, 85357]
+	$scope.view_data_ids = [85357]
+	elementData.save_86973 = function(o,data){
+		console.log(o, data)
+	}
+
 	elementData.save_86811 = function(o,data){
 		console.log(o.children, $scope.elementsMap[o.reference].children)
 		elementData.save_85357(o,data)
 	}
+
 	elementData.save_85357 = function(o,data){
 		console.log(o.children, $scope.elementsMap[o.reference].children)
 		data.nextDbIdNr 
@@ -378,14 +385,20 @@ function Daybook($scope, $http){
 		if(data.docbody_id){
 			data.sql = "UPDATE docbody SET docbody = :docbody WHERE docbody_id=:doc_id; "
 		}else{
-			data.sql = "INSERT INTO docbody (docbody_id, docbody) VALUES (:doc_id, :docbody);"
+			data.sql = "INSERT INTO docbody (docbody_id, docbody) VALUES (:doc_id, :docbody); "
 		}
-		console.log($scope.elementsMap[o.reference])
+		console.log(o.reference, $scope.elementsMap[o.reference], $scope.elementsMap[o.reference].children[0])
 		if(elementData['save_'+o.reference])
 			elementData['save_'+o.reference](o,data)
-		writeSql(data)
+		angular.forEach($scope.elementsMap[o.reference].children, function(v){
+			console.log(v.reference,v)
+			if(elementData['save_'+v.reference])
+				elementData['save_'+v.reference](v,data)
+		})
+//		writeSql(data)
 		delete $scope.elementNoteDialog.docBodyElementId
 	}
+
 	$scope.saveElementDocBody = saveElementDocBody
 
 	var editElementDocBody = function(o){

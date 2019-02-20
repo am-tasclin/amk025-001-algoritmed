@@ -42,7 +42,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 			reference:amkElId,
 			reference2:o.doc_id,
 			sql:"INSERT INTO doc (doctype, doc_id, parent, reference, reference2) " +
-				" VALUES (18, :nextDbId1, :parent, :reference, :reference2);",
+				" VALUES (18, :nextDbId1, :parent, :reference, :reference2); ",
 			dataAfterSave:function(response){
 				console.log(response)
 			}
@@ -52,7 +52,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 			var dataParentElement = {
 				parent:$scope.request.parameters.amk,
 				reference:$scope.request.parameters.l1,
-				sql:"INSERT INTO doc (doctype, doc_id, parent, reference) VALUES (18, :nextDbId1, :parent, :reference);",
+				sql:"INSERT INTO doc (doctype, doc_id, parent, reference) VALUES (18, :nextDbId1, :parent, :reference); ",
 				dataAfterSave:function(response){
 					console.log(response)
 					console.log(response.data)
