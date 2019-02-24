@@ -1,5 +1,6 @@
 app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	initApp($scope, $http)
+	exe_fn.jsonTree = new JsonTree($scope, $http)
 	initEdit_table($scope, $http)
 	var jsonDocAmk025 = new JsonDoc($scope, $http, 85085)
 	jsonDocAmk025.readDoc()
@@ -36,8 +37,9 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		sql:sql_amk025.amk025_template(),
 		jsonId:85242,
 		afterRead:function(response){
-			console.log(response.data)
+//			console.log(response.data)
 			$scope.patient_template = JSON.parse(response.data.list[0].docbody)
+//			console.log(sql_amk025.amk025_template(), $scope.patient_template)
 			console.log($scope.patient_template)
 			json_elementsMap($scope.patient_template.docRoot, $scope.elementsMap, $scope.referencesMap)
 			readRef($scope)

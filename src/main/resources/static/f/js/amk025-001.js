@@ -92,18 +92,38 @@ var initEdit_table = function($scope, $http){
 		$scope.edit_table.editRow = this.newRow
 //		initEditRow()
 	}
+
 	$scope.edit_table.selectRow = function(row){
 		this.selectedRow = row
 		console.log($scope.edit_table.selectedRow)
 	}
+
 	$scope.edit_table.cancelEditRow = function(){
 		delete $scope.edit_table.editRow
 		delete $scope.edit_table.newRow
 	}
+
+	elementData.open_col_85370 = function(o){
+		angular.forEach($scope.referencesMap[85367].children, function(v){
+			if(v.string == o){
+				$scope.edit_table.editRow.gender_id = v.doc_id
+			}
+		})
+	}
+
 	$scope.edit_table.setEditRow = function(table_id){
 		console.log(this.selectedRow)
 		$scope.edit_table.editRow = this.selectedRow
+		angular.forEach($scope.edit_table.editRow, function(v, k){
+//			console.log(k, v, elementData)
+			if('col_85247'==k){
+				$scope.edit_table.editRow.start_col_85247 = v
+			}
+			if(elementData['open_'+k])
+				elementData['open_'+k](v)
+		})
 	}
+
 	$scope.edit_table.saveEditRow = function(rowParentId){
 		this.editRow.row_id = this.editRow['row_'+saveRow.tableId+'_id']
 		//console.log(this.editRow)
@@ -116,10 +136,15 @@ var initEdit_table = function($scope, $http){
 }
 
 function readRef($scope){
-//	console.log('readRef', $scope.referencesMap)
+	console.log('readRef', $scope.referencesMap)
 	angular.forEach($scope.referencesMap, function(v,k){
 		if(!v){
-//			console.log(k)
+			console.log(k, exe_fn)
+			exe_fn.jsonTree.readTree(k, null, function(o){
+				console.log(o)
+				$scope.referencesMap[k] = o
+			})
+//			console.log(k, sql_amk025.read_obj_from_docRoot())
 			readSql({
 				sql:sql_amk025.read_obj_from_docRoot(),
 				jsonId:k,
@@ -128,7 +153,7 @@ function readRef($scope){
 //						console.log(k)
 						if(response.data.list[0]){
 							var jsonDoc = JSON.parse(response.data.list[0].docbody)
-//							console.log(k, jsonDoc)
+							console.log(k, jsonDoc)
 							json_elementsMap(jsonDoc.docRoot, $scope.elementsMap, $scope.referencesMap)
 						}
 					}
@@ -282,6 +307,8 @@ readAmk = function($scope){
 	})
 }
 
+var elementData = {}
+
 function Daybook($scope, $http){
 
 	$scope.elementNoteDialog = {
@@ -323,7 +350,6 @@ function Daybook($scope, $http){
 		}
 	}
 
-	var elementData = {}
 	elementData.init_85357 = function(o,data){
 		o.at = {}
 		angular.forEach($scope.elementsMap[o.reference].children, function(v){
@@ -335,11 +361,16 @@ function Daybook($scope, $http){
 		})
 	}
 
+
+	elementData.open_86973 = function(o,data){
+		console.log(o, $scope.elementsMap[o.reference], data)
+	}
+
 	elementData.open_86811 = function(o,data){
 		elementData.open_85357(o,data)
 	}
+
 	elementData.open_85357 = function(o,data){
-		console.log(o, $scope.elementsMap[o.reference])
 		elementData.init_85357(o)
 		angular.forEach($scope.elementsMap[o.reference].children, function(v){
 			if(o.at[v.doc_id])
@@ -437,15 +468,14 @@ function Daybook($scope, $http){
 	}
 	$scope.editElementDocBody = editElementDocBody
 
-
 	this.getDataElement = function(fnAfterSave){ 
 		var o = {
-				sql:"INSERT INTO doc (doctype, doc_id, parent, reference) " +
-				" VALUES (18, :nextDbId1, :parent, :reference);\n " +
-				"INSERT INTO docbody (docbody_id, docbody) VALUES (:nextDbId1, :docbody);\n ",
-				dataAfterSave:function(response){
-					console.log(response)
-				},
+			sql:"INSERT INTO doc (doctype, doc_id, parent, reference) " +
+			" VALUES (18, :nextDbId1, :parent, :reference);\n " +
+			"INSERT INTO docbody (docbody_id, docbody) VALUES (:nextDbId1, :docbody);\n ",
+			dataAfterSave:function(response){
+				console.log(response)
+			},
 		}
 		if(fnAfterSave)
 			o.dataAfterSave = fnAfterSave
@@ -616,8 +646,7 @@ function JsonTree($scope, $http){
 		})
 	}
 
-
-	this.readTree = function(elementId, docName){
+	this.readTree = function(elementId, docName, fn){
 //		console.log(sql_1c.doc_read_elements()+" (" +elementId +")")
 		var thisO = this
 		if(!$scope.elementsMap[elementId])
@@ -629,6 +658,9 @@ function JsonTree($scope, $http){
 				if(el && !$scope.elementsMap[el.doc_id]){
 					thisO.mapElement(el)
 					thisO.readTreeLevel(0, elementId)
+					if(fn){
+						fn(el)
+					}
 					if(docName){
 						$scope[docName] = el
 						console.log(elementId,'------readTree--------', el)
@@ -638,6 +670,7 @@ function JsonTree($scope, $http){
 		})
 //		console.log(sql_1c.doc_read_elements_0())
 	}
+
 }
 
 

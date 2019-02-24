@@ -43,6 +43,7 @@
 						</thead>
 						<tbody>
 							<tr data-ng-repeat="row in patient_data" class="w3-hover-shadow"
+								title="{{row.row_85243_id}}"
 								data-ng-click="edit_table.selectRow(row)">
 								<td
 									data-ng-class="{'w3-green':row[rowAttName]==edit_table.selectedRow[rowAttName]}">
@@ -52,9 +53,12 @@
 									class="w3-card " data-ng-if="row.amk"> <i
 										class="fa fa-id-card-o" aria-hidden="true"></i>
 								</a></td>
-								<td data-ng-repeat="col in patient_template.docRoot.children">
-									{{row['col_'+col.doc_id]?'':'&nbsp;'}}
-									{{row['col_'+col.doc_id]}}</td>
+								<td data-ng-repeat="col in patient_template.docRoot.children"
+									data-ng-switch="col.doc_id"><span
+									data-ng-switch-when="85247"> {{row['col_'+col.doc_id] |
+										date:'mediumDate'}} </span> <span data-ng-switch-default>
+										{{row['col_'+col.doc_id]?'':'&nbsp;'}}
+										{{row['col_'+col.doc_id]}} </span></td>
 							</tr>
 						</tbody>
 					</table>
@@ -87,10 +91,29 @@
 				</div>
 				<div data-ng-repeat="col in patient_template.docRoot.children">
 					<div class="w3-tiny am-b" title="{{col.doc_id}}">{{col.value}}</div>
-					<div class="w3-border" data-ng-if="85370==col.doc_id">inDevelopment</div>
-					<input class="w3-border" data-ng-if="85370!=col.doc_id"
+					<div data-ng-if="85370==col.doc_id">
+						<span
+							data-ng-repeat="sEl in referencesMap[col.reference].children">
+							<label class="w3-hover-shadow"> <input name="gender"
+								data-ng-value="sEl.doc_id"
+								data-ng-model="edit_table.editRow.gender_id" type="radio">
+								{{sEl.string}}
+						</label>
+						</span> <label class="w3-hover-shadow"> <input name="gender"
+							data-ng-click="edit_table.editRow.gender_id=null" type="radio">
+							?
+						</label>
+					</div>
+					<input class="w3-border"
+						data-ng-if="85370!=col.doc_id && 85247!=col.doc_id"
 						data-ng-model="edit_table.editRow['col_'+col.doc_id]"
 						data-ng-disabled="!edit_table.editRow" />
+					<div data-ng-if="85247==col.doc_id">
+						<input class="w3-border" type="date"
+							value="{{edit_table.editRow['col_'+col.doc_id]}}"
+							data-ng-model="edit_table.editRow['col_'+col.doc_id]"
+							data-ng-disabled="!edit_table.editRow" />
+					</div>
 				</div>
 			</div>
 		</div>

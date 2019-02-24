@@ -1,3 +1,4 @@
+if(!sql_1c)
 var sql_1c = {}
 sql_1c.insertCell = function(row_id, columnId, i){
 	var sql = "INSERT INTO doc (doctype, doc_id, parent, reference ) " +
@@ -37,7 +38,17 @@ var Init_saveRow = function ($scope, $http, tableId){
 					sql += "UPDATE doc SET reference = " + editRow['ref2_'+columnId] +" " +" WHERE doc_id = "+cellId + ";\n "
 					break;
 				case 26:
-					sql += "UPDATE date SET value = '" + v +"' " +" WHERE date_id = "+cellId + ";\n "
+					console.log(v, editRow['start_col_'+columnId])
+					var d1
+					if(v == editRow['start_col_'+columnId]){
+						d1 = v
+					}else{
+						var d = new Date(Date.parse(v))
+						d.setDate(d.getDate()+1)
+						var n = d.toISOString();
+						d1 = n.split('T')[0]
+					}
+					sql += "UPDATE date SET value = '" + d1 +"' " +" WHERE date_id = "+cellId + ";\n "
 					break;
 				case 22:
 					sql += "UPDATE string SET value = '" + v +"' " +" WHERE string_id = "+cellId + ";\n "
