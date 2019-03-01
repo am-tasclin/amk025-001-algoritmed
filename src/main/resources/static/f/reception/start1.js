@@ -17,7 +17,6 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 			reference:$scope.elementsMap[85085].docRoot.doc_id,
 			reference_2:$scope.elementsMap[85089].doc_id,
 			reference_3:$scope.elementsMap[85255].doc_id,
-			reference_3:$scope.elementsMap[85255].doc_id,
 			reference2_3:$scope.edit_table.selectedRow.row_85243_id,
 			dataAfterSave:function(response){
 				console.log(response)

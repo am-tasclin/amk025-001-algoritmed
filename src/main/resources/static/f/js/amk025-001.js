@@ -139,7 +139,7 @@ function readRef($scope){
 	console.log('readRef', $scope.referencesMap)
 	angular.forEach($scope.referencesMap, function(v,k){
 		if(!v){
-			console.log(k, exe_fn)
+//			console.log(k, exe_fn)
 			exe_fn.jsonTree.readTree(k, null, function(o){
 				console.log(o)
 				$scope.referencesMap[k] = o
